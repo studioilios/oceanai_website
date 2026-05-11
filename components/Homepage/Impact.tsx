@@ -1,9 +1,9 @@
 import { getCachedImage } from '@/lib/image-cache';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { Globe, TrendingUp, Users, Award } from 'lucide-react';
+import { Activity, TrendingUp, Users, Award } from 'lucide-react';
 
 const stats = [
-  { icon: Globe, value: '150+', label: 'Countries Served', gradient: 'from-blue-500 to-cyan-600' },
+  { icon: Activity, value: '99.9%', label: 'Platform Uptime', gradient: 'from-blue-500 to-cyan-600' },
   { icon: Users, value: '2M+', label: 'Lives Impacted', gradient: 'from-cyan-500 to-blue-600' },
   { icon: TrendingUp, value: '98%', label: 'Satisfaction Rate', gradient: 'from-amber-500 to-orange-600' },
   { icon: Award, value: '50+', label: 'Healthcare Partners', gradient: 'from-emerald-500 to-teal-600' }
