@@ -1,34 +1,18 @@
-import { BloodCrisis } from "@/components/Homepage/BloodCrisis";
-import { Credibility } from "@/components/Homepage/Credibility";
-import { CTA } from "@/components/Homepage/CTA";
-import { Features } from "@/components/Homepage/Features";
-import { Footer } from "@/components/Homepage/Footer";
-import { HealthcareAccessGap } from "@/components/Homepage/HealthcareAccessGap";
-import { HealthcareChallenge } from "@/components/Homepage/HealthcareChallenge";
-import { HealthCrisisBridge } from "@/components/Homepage/HealthCrisisBridge";
-import { Hero } from "@/components/Homepage/Hero";
-import { HowItWorks } from "@/components/Homepage/HowItWorks";
-import { Impact } from "@/components/Homepage/Impact";
-import { MissionVision } from "@/components/Homepage/MissionVision";
-import { OceanAIFeatures } from "@/components/Homepage/OceanAIFeatures";
-import Image from "next/image";
+import Hero from "@/components/home/Hero";
+import FeaturesGrid from "@/components/home/FeaturesGrid";
+import TechStack from "@/components/home/TechStack";
+import InvestorSection from "@/components/home/InvestorSection";
+import DownloadCTA from "@/components/home/DownloadCTA";
 
-export default function Home() {
+export default function HomePage() {
   return (
-     <div className="min-h-screen bg-white">
+    // id for skip-to-content accessibility link
+    <div id="main-content">
       <Hero />
-      <HealthcareAccessGap />
-      <HealthCrisisBridge />
-      <BloodCrisis />
-      <MissionVision />
-      <Features />
-      <OceanAIFeatures />
-      <HealthcareChallenge />
-      <HowItWorks />
-      <Impact />
-      <Credibility />
-      <CTA />
-      <Footer />
+      <FeaturesGrid />
+      <TechStack />
+      <InvestorSection />
+      <DownloadCTA />
     </div>
   );
 }
