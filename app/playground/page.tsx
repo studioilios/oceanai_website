@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import PlaygroundScene from "@/components/canvas/PlaygroundScene";
 
 export const metadata: Metadata = {
   title: "Playground — Try OceanAI",
@@ -55,46 +56,22 @@ const DEMOS = [
 ];
 
 const TAG_COLORS: Record<string, { bg: string; color: string }> = {
-  blue: { bg: "var(--accent-light)", color: "var(--accent)" },
-  emerald: { bg: "rgba(13, 184, 122, 0.1)", color: "#0DB87A" },
-  amber: { bg: "rgba(245, 158, 11, 0.1)", color: "#B45309" },
+  blue: { bg: "rgba(56, 189, 248, 0.16)", color: "#7DD3FC" },
+  emerald: { bg: "rgba(52, 211, 153, 0.16)", color: "#6EE7B7" },
+  amber: { bg: "rgba(251, 191, 36, 0.16)", color: "#FCD34D" },
 };
 
 export default function PlaygroundPage() {
   return (
-    <>
-      {/* Hero */}
-      <section style={{
-        paddingTop: 140,
-        paddingBottom: 80,
-        background: "linear-gradient(160deg, #0A1628 0%, #1a2a44 100%)",
-        position: "relative",
-        overflow: "hidden",
-      }}>
-        {/* Sonar rings */}
-        <div style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: 700,
-          height: 400,
-          pointerEvents: "none",
-        }}>
-          {[200, 350, 500, 650].map((size) => (
-            <div key={size} style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: size,
-              height: size,
-              borderRadius: "50%",
-              border: "1px solid rgba(26, 107, 255, 0.12)",
-            }} />
-          ))}
-        </div>
+    <div className="relative">
+      {/* Fixed 3D backdrop — the "hub" variant borrows a ring color from
+          each of the 5 demos below, since this page previews all of them.
+          Same fixed/z-0 layer the detail pages use, so it shows through
+          every non-opaque section on this page. */}
+      <PlaygroundScene variant="hub" />
 
+      {/* Hero */}
+      <section className="relative z-10" style={{ paddingTop: 140, paddingBottom: 80 }}>
         <div className="container" style={{ position: "relative", zIndex: 2, textAlign: "center" }}>
           <div style={{
             display: "inline-flex",
@@ -120,23 +97,27 @@ export default function PlaygroundPage() {
             letterSpacing: "-0.03em",
             lineHeight: 1.1,
             marginBottom: 20,
+            textShadow: "0 2px 24px rgba(5, 11, 20, 0.85)",
           }}>
             The OceanAI Playground
           </h1>
           <p style={{
             fontSize: "1.0625rem",
-            color: "rgba(255,255,255,0.5)",
+            color: "rgba(255,255,255,0.6)",
             maxWidth: 480,
             margin: "0 auto",
             lineHeight: 1.6,
+            textShadow: "0 1px 12px rgba(5, 11, 20, 0.7)",
           }}>
             Interact with the core features of OceanAI directly in your browser. Real AI. Real results.
           </p>
         </div>
       </section>
 
-      {/* Demo cards */}
-      <section className="section-pad" style={{ background: "var(--bg-primary)" }}>
+      {/* Demo cards — transparent section, cards keep their own opaque
+          --bg-card background so they read fine over the 3D scene, the
+          same way the stat cards on every other page do. */}
+      <section className="section-pad relative z-10">
         <div className="container">
           <div style={{
             display: "grid",
@@ -147,13 +128,27 @@ export default function PlaygroundPage() {
               const tc = TAG_COLORS[demo.tagColor] || TAG_COLORS.blue;
               return (
                 <Link key={demo.href} href={demo.href} style={{ textDecoration: "none" }}>
-                  <div className="card" style={{ padding: "32px 28px", height: "100%", display: "flex", flexDirection: "column" }}>
+                  <div
+                    className="pg-card"
+                    style={{
+                      padding: "32px 28px",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      // background: "rgba(6, 14, 26, 0.6)",
+                      backdropFilter: "blur(2px)",
+                      WebkitBackdropFilter: "blur(22px)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: 20,
+                    }}
+                  >
                     <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 18 }}>
                       <div style={{
                         width: 56,
                         height: 56,
                         borderRadius: 14,
-                        background: "var(--bg-subtle)",
+                        background: "rgba(255, 255, 255, 0.06)",
+                        border: "1px solid rgba(255, 255, 255, 0.08)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -179,15 +174,16 @@ export default function PlaygroundPage() {
                       fontFamily: "var(--font-display)",
                       fontWeight: 700,
                       fontSize: "1.125rem",
-                      color: "var(--text-primary)",
+                      color: "#EAF2FB",
                       marginBottom: 10,
                       letterSpacing: "-0.01em",
+                      textShadow: "0 1px 10px rgba(5, 11, 20, 0.6)",
                     }}>
                       {demo.title}
                     </h2>
                     <p style={{
                       fontSize: "0.9rem",
-                      color: "var(--text-secondary)",
+                      color: "rgba(234, 242, 251, 0.62)",
                       lineHeight: 1.6,
                       flex: 1,
                       marginBottom: 20,
@@ -200,8 +196,8 @@ export default function PlaygroundPage() {
                       alignItems: "center",
                       gap: 6,
                       padding: "10px 18px",
-                      background: "var(--accent-light)",
-                      color: "var(--accent)",
+                      background: "rgba(26, 107, 255, 0.18)",
+                      color: "#93C5FD",
                       borderRadius: 100,
                       fontFamily: "var(--font-display)",
                       fontWeight: 600,
@@ -218,6 +214,14 @@ export default function PlaygroundPage() {
         </div>
 
         <style>{`
+          .pg-card {
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+          }
+          .pg-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.22) !important;
+            background: rgba(6, 14, 26, 0.74) !important;
+          }
           @media (max-width: 1024px) {
             div[style*="grid-template-columns: repeat(3, 1fr)"] {
               grid-template-columns: repeat(2, 1fr) !important;
@@ -230,6 +234,6 @@ export default function PlaygroundPage() {
           }
         `}</style>
       </section>
-    </>
+    </div>
   );
 }

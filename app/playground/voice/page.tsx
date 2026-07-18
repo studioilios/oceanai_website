@@ -2,6 +2,14 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import PlaygroundShell from "@/components/playground/PlaygroundShell";
+import {
+  glassPanel,
+  glassPanelSoft,
+  textPrimary,
+  textSecondary,
+  textMuted,
+  borderColor,
+} from "@/components/playground/glass";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -11,6 +19,8 @@ const SAMPLE_QUESTIONS = [
   "What does a low hemoglobin level mean?",
   "When should I see a doctor for chest pain?",
 ];
+
+const ACCENT = "#FB7185"; // matches the "voice" PlaygroundScene variant
 
 export default function VoicePlayground() {
   const [listening, setListening] = useState(false);
@@ -65,7 +75,6 @@ export default function VoicePlayground() {
 
       setMessages(prev => [...prev, { role: "assistant", content: data.result }]);
 
-      // Text-to-speech
       if ("speechSynthesis" in window) {
         const utter = new SpeechSynthesisUtterance(data.result);
         utter.rate = 0.95;
@@ -82,11 +91,11 @@ export default function VoicePlayground() {
   const startListening = useCallback(() => {
     if (!supported) return;
 
-    const SpeechRecognition =
+    const SpeechRecognitionCtor =
       (window as typeof window & { webkitSpeechRecognition: typeof SpeechRecognition }).webkitSpeechRecognition ||
       window.SpeechRecognition;
 
-    const recognition = new SpeechRecognition();
+    const recognition = new SpeechRecognitionCtor();
     recognition.continuous = false;
     recognition.interimResults = true;
     recognition.lang = "en-US";
@@ -125,63 +134,55 @@ export default function VoicePlayground() {
   };
 
   return (
-    <PlaygroundShell>
+    <PlaygroundShell variant="voice">
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
           <div style={{
             width: 40, height: 40, borderRadius: 10,
-            background: "rgba(244, 63, 94, 0.1)",
+            background: "rgba(251, 113, 133, 0.16)",
+            border: "1px solid rgba(251, 113, 133, 0.3)",
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: "1.25rem",
           }}>🎙️</div>
           <div>
             <h1 style={{
               fontFamily: "var(--font-display)", fontWeight: 700,
-              fontSize: "1.375rem", color: "var(--text-primary)", letterSpacing: "-0.02em",
+              fontSize: "1.375rem", color: textPrimary, letterSpacing: "-0.02em",
             }}>Voice AI</h1>
-            <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", marginTop: 2 }}>
+            <p style={{ fontSize: "0.875rem", color: textMuted, marginTop: 2 }}>
               Speak your health question. OceanAI listens and responds.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Not supported warning */}
       {!supported && (
         <div style={{
+          background: "rgba(251, 191, 36, 0.1)",
+          border: "1px solid rgba(251, 191, 36, 0.28)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
           padding: "14px 18px",
-          background: "rgba(245, 158, 11, 0.08)",
-          border: "1px solid rgba(245, 158, 11, 0.25)",
           borderRadius: 12,
           marginBottom: 24,
           fontSize: "0.875rem",
-          color: "#B45309",
+          color: "#FCD34D",
         }}>
           🌐 Voice recognition requires Chrome or Edge. Try typing a question below instead.
         </div>
       )}
 
       {/* Voice UI */}
-      <div style={{
-        background: "var(--bg-card)",
-        border: "1px solid var(--border)",
-        borderRadius: 24,
-        overflow: "hidden",
-        boxShadow: "var(--shadow-card)",
-        marginBottom: 24,
-      }}>
+      <div style={{ ...glassPanel, borderRadius: 24, overflow: "hidden", marginBottom: 24 }}>
         {/* Mic area */}
         <div style={{
           padding: "48px 32px",
           textAlign: "center",
-          background: listening
-            ? "linear-gradient(160deg, #FFF1F2 0%, #FFF9FC 100%)"
-            : "linear-gradient(160deg, var(--bg-subtle) 0%, var(--bg-card) 100%)",
-          borderBottom: "1px solid var(--border)",
+          background: listening ? "rgba(251, 113, 133, 0.08)" : "transparent",
+          borderBottom: `1px solid ${borderColor}`,
           transition: "background 0.4s ease",
         }}>
-          {/* Waveform */}
           <div style={{
             display: "flex", alignItems: "center", justifyContent: "center",
             gap: 3, height: 52, marginBottom: 32,
@@ -189,29 +190,31 @@ export default function VoicePlayground() {
             {bars.map((h, i) => (
               <div key={i} style={{
                 width: 3, borderRadius: 2,
-                background: listening ? "#F43F5E" : "var(--border-strong)",
+                background: listening ? ACCENT : "rgba(255,255,255,0.3)",
                 height: `${h}px`,
                 transition: listening ? "height 0.08s ease" : "height 0.3s ease",
-                opacity: listening ? 1 : 0.5,
+                opacity: listening ? 1 : 0.6,
               }} />
             ))}
           </div>
 
-          {/* Mic button */}
           <button
             onClick={toggleListening}
             disabled={!supported && !transcript}
             style={{
               width: 80, height: 80, borderRadius: "50%",
               background: listening
-                ? "linear-gradient(135deg, #F43F5E, #FB7185)"
-                : "linear-gradient(135deg, #1A6BFF, #0DB87A)",
-              border: "none", cursor: supported ? "pointer" : "default",
+                ? "linear-gradient(135deg, rgba(244,63,94,0.7), rgba(251,113,133,0.7))"
+                : "linear-gradient(135deg, rgba(26,107,255,0.6), rgba(13,184,122,0.6))",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              border: "1px solid rgba(255,255,255,0.2)",
+              cursor: supported ? "pointer" : "default",
               display: "flex", alignItems: "center", justifyContent: "center",
               margin: "0 auto 20px",
               boxShadow: listening
-                ? "0 0 0 12px rgba(244, 63, 94, 0.12), 0 8px 24px rgba(244, 63, 94, 0.35)"
-                : "0 8px 24px rgba(26, 107, 255, 0.3)",
+                ? "0 0 0 12px rgba(244, 63, 94, 0.12), 0 8px 24px rgba(244, 63, 94, 0.3)"
+                : "0 8px 24px rgba(26, 107, 255, 0.25)",
               transition: "all 0.25s ease",
             }}
           >
@@ -232,20 +235,19 @@ export default function VoicePlayground() {
           <div style={{
             fontFamily: "var(--font-display)", fontWeight: 600,
             fontSize: "0.9375rem",
-            color: listening ? "#F43F5E" : "var(--text-primary)",
+            color: listening ? ACCENT : textPrimary,
           }}>
             {listening ? "Listening..." : "Tap to speak"}
           </div>
 
           {transcript && (
             <div style={{
+              ...glassPanelSoft,
               marginTop: 16,
               padding: "10px 18px",
-              background: "white",
-              border: "1px solid var(--border)",
               borderRadius: 10,
               fontSize: "0.9rem",
-              color: "var(--text-secondary)",
+              color: textSecondary,
               fontStyle: "italic",
               display: "inline-block",
               maxWidth: 400,
@@ -255,12 +257,11 @@ export default function VoicePlayground() {
           )}
         </div>
 
-        {/* Sample questions */}
         {messages.length === 0 && (
           <div style={{ padding: "20px 24px" }}>
             <p style={{
               fontSize: "0.75rem", fontWeight: 700,
-              color: "var(--text-muted)", textTransform: "uppercase",
+              color: textMuted, textTransform: "uppercase",
               letterSpacing: "0.07em", marginBottom: 12,
             }}>
               Try asking
@@ -272,19 +273,19 @@ export default function VoicePlayground() {
                   onClick={() => askAI(q)}
                   disabled={loading}
                   style={{
+                    ...glassPanelSoft,
                     textAlign: "left", padding: "10px 14px",
-                    background: "var(--bg-subtle)", border: "1px solid var(--border)",
                     borderRadius: 10, cursor: "pointer",
                     fontFamily: "var(--font-body)", fontSize: "0.875rem",
-                    color: "var(--text-primary)", transition: "all 0.15s ease",
+                    color: textPrimary, transition: "all 0.15s ease",
                   }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
-                    (e.currentTarget as HTMLElement).style.background = "var(--accent-light)";
+                    (e.currentTarget as HTMLElement).style.borderColor = ACCENT;
+                    (e.currentTarget as HTMLElement).style.background = "rgba(251, 113, 133, 0.1)";
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-                    (e.currentTarget as HTMLElement).style.background = "var(--bg-subtle)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.08)";
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.05)";
                   }}
                 >
                   🎙️ &ldquo;{q}&rdquo;
@@ -297,10 +298,7 @@ export default function VoicePlayground() {
 
       {/* Conversation */}
       {messages.length > 0 && (
-        <div style={{
-          background: "var(--bg-card)", border: "1px solid var(--border)",
-          borderRadius: 18, overflow: "hidden", boxShadow: "var(--shadow-card)",
-        }}>
+        <div style={{ ...glassPanel, borderRadius: 18, overflow: "hidden" }}>
           <div style={{ padding: "20px 20px", maxHeight: 380, overflowY: "auto" }}>
             {messages.map((msg, i) => (
               <div key={i} style={{
@@ -319,9 +317,10 @@ export default function VoicePlayground() {
                 <div style={{
                   maxWidth: "78%", padding: "10px 14px",
                   borderRadius: msg.role === "user" ? "14px 14px 4px 14px" : "4px 14px 14px 14px",
-                  background: msg.role === "user" ? "var(--accent)" : "var(--bg-subtle)",
-                  border: msg.role === "assistant" ? "1px solid var(--border)" : "none",
-                  color: msg.role === "user" ? "white" : "var(--text-primary)",
+                  ...(msg.role === "user"
+                    ? { background: "rgba(251, 113, 133, 0.32)", border: "1px solid rgba(251, 113, 133, 0.4)" }
+                    : glassPanelSoft),
+                  color: msg.role === "user" ? "#FFF1F2" : textPrimary,
                   fontSize: "0.9rem", lineHeight: 1.6,
                 }}>
                   {msg.content}
@@ -337,14 +336,14 @@ export default function VoicePlayground() {
                   fontSize: "0.625rem", fontWeight: 700, color: "white",
                 }}>AI</div>
                 <div style={{
+                  ...glassPanelSoft,
                   display: "flex", gap: 4, padding: "10px 14px",
-                  background: "var(--bg-subtle)", border: "1px solid var(--border)",
                   borderRadius: "4px 14px 14px 14px",
                 }}>
                   {[0, 1, 2].map(i => (
                     <div key={i} style={{
                       width: 5, height: 5, borderRadius: "50%",
-                      background: "var(--accent)",
+                      background: ACCENT,
                       animation: `pulse 1.2s ease-in-out ${i * 0.2}s infinite`,
                     }} />
                   ))}

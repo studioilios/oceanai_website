@@ -1,158 +1,173 @@
 import { NextRequest, NextResponse } from "next/server";
+import Anthropic from "@anthropic-ai/sdk";
 
-export const runtime = "edge";
+// Uses the Node runtime (not edge) — the Anthropic SDK and base64 file
+// handling below both expect it.
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const { mode, messages, fileData, fileType, fileName } = body;
+const MODEL = "claude-sonnet-5";
 
-    // Build the messages array based on mode
-    let apiMessages: { role: string; content: unknown }[] = [];
-    let systemPrompt = "";
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 
-    if (mode === "file-extract") {
-      // File extraction mode — given base64 file, extract health data
-      systemPrompt = `You are OceanAI's health document extraction engine. 
-Your job is to extract structured health data from any uploaded document.
+type ChatMessage = { role: "user" | "assistant"; content: string };
 
-Return ONLY valid JSON — no markdown fences, no preamble — in this exact shape:
+type ChatBody = { mode: "insurance" | "voice"; messages: ChatMessage[] };
+
+type FileExtractBody = {
+  mode: "file-extract";
+  fileData: string; // base64 for images/PDFs, raw text for the sample prompts
+  fileType: string;
+  fileName: string;
+};
+
+type RequestBody = ChatBody | FileExtractBody;
+
+const SYSTEM_PROMPTS: Record<"insurance" | "voice", string> = {
+  insurance: `You are AxisMapper, Ocean AI's insurance-and-medical-coding assistant.
+You explain ICD-10-CM, CPT, and MS-DRG codes in plain English for people who
+are not medical billers. When a code is given, state what it means, note the
+code family it belongs to, and mention what it typically implies for
+insurance coverage in India. When a condition or symptom is described
+instead of a code, suggest the most likely applicable code(s) and flag that
+a certified medical coder or the treating physician should confirm the
+final code used for billing. Keep answers under ~180 words, use **bold**
+only for code numbers, and never state a code with more confidence than is
+warranted — say "typically" or "often" rather than presenting it as
+definitive medical or legal advice.`,
+  voice: `You are Ocean AI's voice health assistant. You are being read aloud by
+text-to-speech, so write in short, plain spoken sentences with no markdown,
+no bullet points, and no headers. Answer general health questions clearly
+and factually. For anything that sounds like a personal symptom, an
+emergency, or a request for a diagnosis, give brief general information and
+clearly recommend they consult a doctor or, for anything urgent, seek
+immediate medical care — do not attempt to diagnose. Keep responses to 2-4
+sentences.`,
+};
+
+const FILE_EXTRACT_SYSTEM = `You extract structured data from health documents (lab reports,
+prescriptions, insurance cards, and similar) for Ocean AI. Respond with ONLY
+a single JSON object — no markdown fences, no commentary before or after —
+matching exactly this shape:
+
 {
-  "documentType": "Lab Report | Prescription | Medical Record | Insurance Card | Imaging Report | Other",
-  "patientInfo": { "name": "..." | null, "dob": "..." | null, "id": "..." | null },
-  "date": "YYYY-MM-DD or descriptive string" | null,
-  "provider": "Doctor or facility name" | null,
-  "summary": "1-2 sentence plain English summary of the document",
-  "keyFindings": [
-    { "label": "Finding name", "value": "Value with units", "status": "normal | abnormal | critical | unknown" }
-  ],
-  "medications": ["med name + dose"] | [],
-  "diagnoses": [{ "code": "ICD-10 if visible", "description": "plain English" }] | [],
-  "followUp": "Any follow-up instructions mentioned" | null,
-  "flags": ["Any critical values or urgent items"] | []
+  "documentType": string,
+  "patientInfo": { "name": string | null, "dob": string | null, "id": string | null },
+  "date": string | null,
+  "provider": string | null,
+  "summary": string,
+  "keyFindings": [{ "label": string, "value": string, "status": "normal" | "abnormal" | "critical" | "unknown" }],
+  "medications": string[],
+  "diagnoses": [{ "code": string, "description": string }],
+  "followUp": string | null,
+  "flags": string[]
 }
 
-If a field is not present in the document, use null or [].
-Never invent data. Only extract what is actually in the document.`;
+Use null for any field you cannot determine — never invent patient details,
+dates, or codes that are not present in the document. "flags" is for
+anything urgent or out-of-range that a person should notice immediately;
+leave it as an empty array if nothing qualifies. Keep "summary" to 1-2
+sentences.`;
+
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"] as const;
+type AllowedImageType = (typeof ALLOWED_IMAGE_TYPES)[number];
+
+function isAllowedImageType(t: string): t is AllowedImageType {
+  return (ALLOWED_IMAGE_TYPES as readonly string[]).includes(t);
+}
+
+function extractText(content: Anthropic.Messages.ContentBlock[]): string {
+  return content
+    .filter((block): block is Anthropic.Messages.TextBlock => block.type === "text")
+    .map((block) => block.text)
+    .join("\n")
+    .trim();
+}
+
+function stripJsonFences(raw: string): string {
+  return raw
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/```\s*$/i, "")
+    .trim();
+}
+
+export async function POST(req: NextRequest) {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json(
+      { error: "Server is missing ANTHROPIC_API_KEY. Add it to your environment and redeploy." },
+      { status: 500 }
+    );
+  }
+
+  let body: RequestBody;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
+
+  try {
+    if (body.mode === "insurance" || body.mode === "voice") {
+      const { messages } = body;
+      if (!Array.isArray(messages) || messages.length === 0) {
+        return NextResponse.json({ error: "No messages provided." }, { status: 400 });
+      }
+
+      const response = await anthropic.messages.create({
+        model: MODEL,
+        max_tokens: body.mode === "voice" ? 350 : 700,
+        system: SYSTEM_PROMPTS[body.mode],
+        messages: messages.map((m) => ({ role: m.role, content: m.content })),
+      });
+
+      return NextResponse.json({ result: extractText(response.content) });
+    }
+
+    if (body.mode === "file-extract") {
+      const { fileData, fileType, fileName } = body;
+      if (!fileData) {
+        return NextResponse.json({ error: "No file data provided." }, { status: 400 });
+      }
+
+      const content: Anthropic.Messages.MessageParam["content"] = [];
 
       if (fileType?.startsWith("image/")) {
-        apiMessages = [{
-          role: "user",
-          content: [
-            {
-              type: "image",
-              source: {
-                type: "base64",
-                media_type: fileType,
-                data: fileData,
-              },
-            },
-            {
-              type: "text",
-              text: `Extract all health data from this document. File name: ${fileName || "uploaded file"}`,
-            },
-          ],
-        }];
+        if (!isAllowedImageType(fileType)) {
+          return NextResponse.json({ error: `Unsupported image type: ${fileType}` }, { status: 400 });
+        }
+        content.push({ type: "image", source: { type: "base64", media_type: fileType, data: fileData } });
       } else if (fileType === "application/pdf") {
-        apiMessages = [{
-          role: "user",
-          content: [
-            {
-              type: "document",
-              source: {
-                type: "base64",
-                media_type: "application/pdf",
-                data: fileData,
-              },
-            },
-            {
-              type: "text",
-              text: `Extract all health data from this document. File name: ${fileName || "uploaded file"}`,
-            },
-          ],
-        }];
+        content.push({
+          type: "document",
+          source: { type: "base64", media_type: "application/pdf", data: fileData },
+        });
       } else {
-        // Text-based file — treat the content as text
-        apiMessages = [{
-          role: "user",
-          content: `Extract all health data from this document content:\n\nFile: ${fileName}\n\n${fileData}`,
-        }];
+        // Sample prompts and unrecognized types arrive as plain text, not base64.
+        content.push({ type: "text", text: `Document contents:\n${fileData}` });
       }
-    } else if (mode === "insurance") {
-      // Insurance AI chat mode
-      systemPrompt = `You are AxisMapper, OceanAI's insurance intelligence AI — fine-tuned on ICD-10-CM 2026, CPT codes, and MS-DRG mappings.
 
-You help users understand:
-- ICD-10-CM diagnosis codes (e.g. E11.9 = Type 2 diabetes without complications)
-- CPT procedure codes (e.g. 99213 = Office visit, established patient, moderate complexity)
-- MS-DRG codes for hospital reimbursement
-- Insurance coverage implications
-- Code relationships and common coding patterns
+      content.push({
+        type: "text",
+        text: `File name: ${fileName || "unknown"}. Extract the structured JSON as instructed.`,
+      });
 
-Response format — always structure your answer with these sections when relevant:
-**Code:** [the code(s)]
-**Description:** [clear plain English]
-**Category:** [broad category]
-**Coverage notes:** [typical insurance handling, brief]
-**Related codes:** [2-3 related codes worth knowing]
+      const response = await anthropic.messages.create({
+        model: MODEL,
+        max_tokens: 1200,
+        system: FILE_EXTRACT_SYSTEM,
+        messages: [{ role: "user", content }],
+      });
 
-Be accurate, clear, and practical. If you don't know a specific code, say so clearly rather than guessing.
-Keep responses concise but complete. Use medical accuracy without being overly technical.`;
-
-      apiMessages = messages.map((m: { role: string; content: string }) => ({
-        role: m.role,
-        content: m.content,
-      }));
-    } else if (mode === "voice") {
-      // Voice AI mode — general health Q&A
-      systemPrompt = `You are OceanAI's voice health assistant. The user has spoken a health question to you.
-Respond in a natural, conversational tone — as if speaking aloud.
-Keep answers clear, accurate, and under 3 sentences unless more detail is genuinely needed.
-Focus on being helpful, not on disclaimers. Always recommend professional consultation for diagnosis.`;
-
-      apiMessages = messages.map((m: { role: string; content: string }) => ({
-        role: m.role,
-        content: m.content,
-      }));
-    } else {
-      return NextResponse.json({ error: "Unknown mode" }, { status: 400 });
+      const raw = extractText(response.content);
+      return NextResponse.json({ result: stripJsonFences(raw) });
     }
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: "AI service is not configured. Set ANTHROPIC_API_KEY in your environment variables." },
-        { status: 503 }
-      );
-    }
-
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "anthropic-version": "2023-06-01",
-        "x-api-key": apiKey,
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: apiMessages,
-      }),
-    });
-
-    if (!response.ok) {
-      const err = await response.text();
-      console.error("Anthropic API error:", err);
-      return NextResponse.json({ error: "AI service error" }, { status: 500 });
-    }
-
-    const data = await response.json();
-    const text = data.content?.find((b: { type: string }) => b.type === "text")?.text ?? "";
-
-    return NextResponse.json({ result: text });
+    return NextResponse.json({ error: `Unknown mode: ${(body as { mode?: string }).mode}` }, { status: 400 });
   } catch (err) {
-    console.error("Route error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    console.error("Claude API error:", err);
+    const message = err instanceof Error ? err.message : "Something went wrong.";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

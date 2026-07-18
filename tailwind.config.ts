@@ -21,11 +21,23 @@ const config: Config = {
         "text-secondary": "#3D5166",
         "text-muted": "#7A8FA6",
         border: "#DDE5EF",
+           abyss: "#050B14",      // deepest background — below all light
+        depth: "#0A1628",      // primary background — mid-ocean
+        surface: "#0F2038",    // panel background — upper water
+        current: "#1A6BFF",    // primary accent — arterial blue
+        pulse: "#0DB87A",      // secondary accent — vital teal
+        alarm: "#FF6B5B",      // crisis coral — used sparingly, for stat urgency
+        foam: "#EAF2FB",       // primary text on dark
+        mist: "rgba(234,242,251,0.56)", // secondary text on dark
+        haze: "rgba(234,242,251,0.14)",
       },
       fontFamily: {
-        display: ["Plus Jakarta Sans", "sans-serif"],
-        body: ["Inter", "sans-serif"],
-        mono: ["JetBrains Mono", "monospace"],
+  display: ["var(--font-display)", "serif"],
+        body: ["var(--font-body)", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
+      },
+        letterSpacing: {
+        tightest: "-0.04em",
       },
       borderRadius: {
         sm: "8px",

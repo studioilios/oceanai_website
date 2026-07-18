@@ -2,6 +2,19 @@
 
 import { useState, useRef, useCallback } from "react";
 import PlaygroundShell from "@/components/playground/PlaygroundShell";
+import {
+  glassPanel,
+  glassPanelSoft,
+  glassButtonPrimary,
+  glassButtonGhost,
+  glassChip,
+  textPrimary,
+  textSecondary,
+  textMuted,
+  borderColor,
+  borderColorStrong,
+  statusColors,
+} from "@/components/playground/glass";
 
 type ExtractedField = {
   label: string;
@@ -22,18 +35,13 @@ type ExtractionResult = {
   flags: string[];
 };
 
-const STATUS_COLORS: Record<string, { bg: string; color: string; label: string }> = {
-  normal:   { bg: "rgba(13, 184, 122, 0.1)",  color: "#0DB87A", label: "Normal" },
-  abnormal: { bg: "rgba(245, 158, 11, 0.1)",  color: "#B45309", label: "Abnormal" },
-  critical: { bg: "rgba(244, 63, 94, 0.1)",   color: "#E11D48", label: "Critical" },
-  unknown:  { bg: "rgba(122, 143, 166, 0.1)", color: "#7A8FA6", label: "–" },
-};
-
 const SAMPLE_FILES = [
   { label: "Lab Report (Blood Panel)", icon: "🩸", prompt: "Sample CBC lab report showing hemoglobin 11.2 g/dL (low), WBC 9.8 K/uL (normal), platelets 210 K/uL (normal). Patient: John D., DOB 1975-03-14. Ordered by Dr. Sharma, City Hospital. Date: 2026-01-15." },
   { label: "Prescription", icon: "💊", prompt: "Prescription: Metformin 500mg twice daily, Lisinopril 10mg once daily. Patient: Sarah M., ID #4821. Prescriber: Dr. Patel, DM Clinic. ICD-10: E11.9 (Type 2 diabetes without complications). Date: 2026-05-20." },
   { label: "Insurance Card", icon: "🪪", prompt: "Insurance card for Blue Cross Blue Shield. Member: Ravi K., ID: XYZ998877, Group: 10293. Plan: PPO Plus. Copay: $25 primary, $50 specialist. Deductible: $1500 individual." },
 ];
+
+const ACCENT = "#38BDF8"; // matches the "upload" PlaygroundScene variant
 
 export default function UploadPlayground() {
   const [dragOver, setDragOver] = useState(false);
@@ -41,7 +49,6 @@ export default function UploadPlayground() {
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState<string | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
-  const [fileType, setFileType] = useState<string | null>(null);
   const [result, setResult] = useState<ExtractionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -50,22 +57,19 @@ export default function UploadPlayground() {
     setResult(null);
     setError(null);
     setFileName(file.name);
-    setFileType(file.type);
     setUploading(true);
     setProgress(10);
 
-    // Read file as base64
     const base64 = await new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result as string;
-        resolve(result.split(",")[1]); // strip data:...;base64,
+        resolve(result.split(",")[1]);
       };
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
 
-    // Preview for images
     if (file.type.startsWith("image/")) {
       setFilePreview(URL.createObjectURL(file));
     } else {
@@ -93,7 +97,6 @@ export default function UploadPlayground() {
         throw new Error(data.error || "Extraction failed");
       }
 
-      // Parse JSON result
       let parsed: ExtractionResult;
       try {
         parsed = JSON.parse(data.result);
@@ -114,7 +117,6 @@ export default function UploadPlayground() {
     setResult(null);
     setError(null);
     setFileName(sample.label);
-    setFileType("text/plain");
     setFilePreview(null);
     setUploading(true);
     setProgress(20);
@@ -169,28 +171,27 @@ export default function UploadPlayground() {
     setError(null);
     setFileName(null);
     setFilePreview(null);
-    setFileType(null);
     setProgress(0);
     if (inputRef.current) inputRef.current.value = "";
   };
 
   return (
-    <PlaygroundShell>
+    <PlaygroundShell variant="upload">
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
           <div style={{
             width: 40, height: 40, borderRadius: 10,
-            background: "var(--accent-light)",
+            ...glassChip(ACCENT),
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: "1.25rem",
           }}>📎</div>
           <div>
             <h1 style={{
               fontFamily: "var(--font-display)", fontWeight: 700,
-              fontSize: "1.375rem", color: "var(--text-primary)", letterSpacing: "-0.02em",
+              fontSize: "1.375rem", color: textPrimary, letterSpacing: "-0.02em",
             }}>Smart File Upload</h1>
-            <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", marginTop: 2 }}>
+            <p style={{ fontSize: "0.875rem", color: textMuted, marginTop: 2 }}>
               Upload any health document. Claude extracts structured data in real time.
             </p>
           </div>
@@ -201,19 +202,18 @@ export default function UploadPlayground() {
 
         {/* Left panel — upload zone */}
         <div>
-          {/* Drop zone */}
           <div
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
             onDrop={handleDrop}
             onClick={() => !uploading && inputRef.current?.click()}
             style={{
-              border: `2px dashed ${dragOver ? "var(--accent)" : "var(--border-strong)"}`,
+              ...(dragOver ? glassChip(ACCENT, 0.14) : glassPanel),
+              border: `2px dashed ${dragOver ? ACCENT : borderColorStrong}`,
               borderRadius: 16,
               padding: "48px 32px",
               textAlign: "center",
               cursor: uploading ? "default" : "pointer",
-              background: dragOver ? "var(--accent-light)" : "var(--bg-card)",
               transition: "all 0.2s ease",
               marginBottom: 20,
               position: "relative",
@@ -225,24 +225,23 @@ export default function UploadPlayground() {
                 <div style={{ fontSize: "2.5rem", marginBottom: 16 }}>⏳</div>
                 <div style={{
                   fontFamily: "var(--font-display)", fontWeight: 600,
-                  fontSize: "1rem", color: "var(--text-primary)", marginBottom: 16,
+                  fontSize: "1rem", color: textPrimary, marginBottom: 16,
                 }}>
                   Extracting health data...
                 </div>
-                {/* Progress bar */}
                 <div style={{
-                  height: 4, background: "var(--border)", borderRadius: 2,
+                  height: 4, background: "rgba(255,255,255,0.1)", borderRadius: 2,
                   overflow: "hidden", maxWidth: 260, margin: "0 auto",
                 }}>
                   <div style={{
                     height: "100%",
                     width: `${progress}%`,
-                    background: "linear-gradient(90deg, var(--accent), #0DB87A)",
+                    background: "linear-gradient(90deg, #1A6BFF, #0DB87A)",
                     borderRadius: 2,
                     transition: "width 0.4s ease",
                   }} />
                 </div>
-                <p style={{ fontSize: "0.8125rem", color: "var(--text-muted)", marginTop: 10 }}>
+                <p style={{ fontSize: "0.8125rem", color: textMuted, marginTop: 10 }}>
                   Claude AI is reading your document...
                 </p>
               </div>
@@ -251,21 +250,20 @@ export default function UploadPlayground() {
                 <div style={{ fontSize: "2.5rem", marginBottom: 12 }}>✅</div>
                 <div style={{
                   fontFamily: "var(--font-display)", fontWeight: 600,
-                  fontSize: "1rem", color: "var(--accent)", marginBottom: 8,
+                  fontSize: "1rem", color: ACCENT, marginBottom: 8,
                 }}>
                   {fileName}
                 </div>
-                <p style={{ fontSize: "0.8125rem", color: "var(--text-muted)", marginBottom: 16 }}>
+                <p style={{ fontSize: "0.8125rem", color: textMuted, marginBottom: 16 }}>
                   Extraction complete. See results →
                 </p>
                 <button onClick={(e) => { e.stopPropagation(); reset(); }} style={{
+                  ...glassButtonGhost,
                   padding: "8px 18px",
-                  background: "var(--bg-subtle)",
-                  border: "1px solid var(--border)",
                   borderRadius: 100,
                   fontSize: "0.8125rem",
                   fontWeight: 500,
-                  color: "var(--text-secondary)",
+                  color: textSecondary,
                   cursor: "pointer",
                   fontFamily: "var(--font-body)",
                 }}>
@@ -276,7 +274,7 @@ export default function UploadPlayground() {
               <div>
                 <div style={{
                   width: 64, height: 64, borderRadius: 16,
-                  background: "var(--bg-subtle)", border: "1px solid var(--border)",
+                  ...glassPanelSoft,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: "2rem", margin: "0 auto 16px",
                 }}>
@@ -284,23 +282,22 @@ export default function UploadPlayground() {
                 </div>
                 <div style={{
                   fontFamily: "var(--font-display)", fontWeight: 700,
-                  fontSize: "1.0625rem", color: "var(--text-primary)", marginBottom: 8,
+                  fontSize: "1.0625rem", color: textPrimary, marginBottom: 8,
                 }}>
                   Drop any file here
                 </div>
-                <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", marginBottom: 20 }}>
+                <p style={{ fontSize: "0.875rem", color: textMuted, marginBottom: 20 }}>
                   or click to browse
                 </p>
                 <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
                   {["PDF", "JPG", "PNG", "DICOM", "CSV", "TXT"].map(fmt => (
                     <span key={fmt} style={{
+                      ...glassPanelSoft,
                       padding: "3px 10px",
-                      background: "var(--bg-subtle)",
-                      border: "1px solid var(--border)",
                       borderRadius: 100,
                       fontSize: "0.75rem",
                       fontWeight: 600,
-                      color: "var(--text-muted)",
+                      color: textMuted,
                     }}>{fmt}</span>
                   ))}
                 </div>
@@ -316,32 +313,29 @@ export default function UploadPlayground() {
             onChange={handleFileChange}
           />
 
-          {/* Error state */}
           {error && (
             <div style={{
+              ...glassChip("#FDA4AF", 0.1),
               padding: "14px 16px",
-              background: "rgba(244, 63, 94, 0.08)",
-              border: "1px solid rgba(244, 63, 94, 0.2)",
               borderRadius: 12,
               marginBottom: 20,
               display: "flex", gap: 10, alignItems: "flex-start",
             }}>
               <span style={{ fontSize: "1rem", flexShrink: 0 }}>⚠️</span>
               <div>
-                <div style={{ fontWeight: 600, fontSize: "0.875rem", color: "#E11D48", marginBottom: 4 }}>
+                <div style={{ fontWeight: 600, fontSize: "0.875rem", color: "#FDA4AF", marginBottom: 4 }}>
                   Extraction failed
                 </div>
-                <div style={{ fontSize: "0.8125rem", color: "var(--text-muted)" }}>{error}</div>
+                <div style={{ fontSize: "0.8125rem", color: textMuted }}>{error}</div>
               </div>
             </div>
           )}
 
-          {/* Sample files */}
           {!result && !uploading && (
             <div>
               <p style={{
                 fontSize: "0.75rem", fontWeight: 700,
-                color: "var(--text-muted)", textTransform: "uppercase",
+                color: textMuted, textTransform: "uppercase",
                 letterSpacing: "0.07em", marginBottom: 10,
               }}>
                 Or try a sample
@@ -352,10 +346,9 @@ export default function UploadPlayground() {
                     key={s.label}
                     onClick={() => processSample(s)}
                     style={{
+                      ...glassPanelSoft,
                       display: "flex", alignItems: "center", gap: 12,
                       padding: "12px 16px",
-                      background: "var(--bg-card)",
-                      border: "1px solid var(--border)",
                       borderRadius: 12,
                       cursor: "pointer",
                       textAlign: "left",
@@ -363,20 +356,20 @@ export default function UploadPlayground() {
                       fontFamily: "var(--font-body)",
                     }}
                     onMouseEnter={e => {
-                      (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
-                      (e.currentTarget as HTMLElement).style.background = "var(--accent-light)";
+                      (e.currentTarget as HTMLElement).style.borderColor = ACCENT;
+                      (e.currentTarget as HTMLElement).style.background = "rgba(56, 189, 248, 0.12)";
                     }}
                     onMouseLeave={e => {
-                      (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-                      (e.currentTarget as HTMLElement).style.background = "var(--bg-card)";
+                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.08)";
+                      (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.05)";
                     }}
                   >
                     <span style={{ fontSize: "1.25rem" }}>{s.icon}</span>
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: "0.875rem", color: "var(--text-primary)" }}>
+                      <div style={{ fontWeight: 600, fontSize: "0.875rem", color: textPrimary }}>
                         {s.label}
                       </div>
-                      <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: 1 }}>
+                      <div style={{ fontSize: "0.75rem", color: textMuted, marginTop: 1 }}>
                         Click to run extraction
                       </div>
                     </div>
@@ -386,14 +379,13 @@ export default function UploadPlayground() {
             </div>
           )}
 
-          {/* Image preview */}
           {filePreview && (
             <div style={{ marginTop: 16 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={filePreview}
                 alt="Uploaded file preview"
-                style={{ width: "100%", borderRadius: 12, border: "1px solid var(--border)" }}
+                style={{ width: "100%", borderRadius: 12, border: `1px solid ${borderColor}` }}
               />
             </div>
           )}
@@ -403,19 +395,12 @@ export default function UploadPlayground() {
         {result && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
-            {/* Doc type + summary */}
-            <div style={{
-              padding: "20px 22px",
-              background: "var(--bg-card)",
-              border: "1px solid var(--border)",
-              borderRadius: 16,
-              boxShadow: "var(--shadow-card)",
-            }}>
+            <div style={{ ...glassPanel, padding: "20px 22px", borderRadius: 16 }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                 <span style={{
+                  ...glassChip(ACCENT),
                   padding: "4px 12px",
-                  background: "var(--accent-light)",
-                  color: "var(--accent)",
+                  color: "#7DD3FC",
                   borderRadius: 100,
                   fontSize: "0.75rem",
                   fontWeight: 700,
@@ -424,72 +409,60 @@ export default function UploadPlayground() {
                   {result.documentType}
                 </span>
                 {result.date && (
-                  <span style={{ fontSize: "0.8125rem", color: "var(--text-muted)" }}>{result.date}</span>
+                  <span style={{ fontSize: "0.8125rem", color: textMuted }}>{result.date}</span>
                 )}
               </div>
-              <p style={{ fontSize: "0.9375rem", color: "var(--text-primary)", lineHeight: 1.6 }}>
+              <p style={{ fontSize: "0.9375rem", color: textPrimary, lineHeight: 1.6 }}>
                 {result.summary}
               </p>
               {result.provider && (
-                <p style={{ fontSize: "0.8125rem", color: "var(--text-muted)", marginTop: 8 }}>
+                <p style={{ fontSize: "0.8125rem", color: textMuted, marginTop: 8 }}>
                   Provider: {result.provider}
                 </p>
               )}
             </div>
 
-            {/* Critical flags */}
             {result.flags.length > 0 && (
-              <div style={{
-                padding: "14px 18px",
-                background: "rgba(244, 63, 94, 0.06)",
-                border: "1px solid rgba(244, 63, 94, 0.2)",
-                borderRadius: 12,
-              }}>
-                <div style={{ fontWeight: 700, fontSize: "0.8125rem", color: "#E11D48", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+              <div style={{ ...glassChip("#FDA4AF", 0.08), padding: "14px 18px", borderRadius: 12 }}>
+                <div style={{ fontWeight: 700, fontSize: "0.8125rem", color: "#FDA4AF", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
                   🚨 Flags
                 </div>
                 {result.flags.map((f, i) => (
-                  <div key={i} style={{ fontSize: "0.875rem", color: "#E11D48", marginBottom: 4 }}>• {f}</div>
+                  <div key={i} style={{ fontSize: "0.875rem", color: "#FDA4AF", marginBottom: 4 }}>• {f}</div>
                 ))}
               </div>
             )}
 
-            {/* Key findings */}
             {result.keyFindings.length > 0 && (
-              <div style={{
-                padding: "18px 20px",
-                background: "var(--bg-card)",
-                border: "1px solid var(--border)",
-                borderRadius: 16,
-                boxShadow: "var(--shadow-card)",
-              }}>
+              <div style={{ ...glassPanel, padding: "18px 20px", borderRadius: 16 }}>
                 <h3 style={{
                   fontFamily: "var(--font-display)", fontWeight: 700,
-                  fontSize: "0.9375rem", color: "var(--text-primary)", marginBottom: 14,
+                  fontSize: "0.9375rem", color: textPrimary, marginBottom: 14,
                 }}>Key Findings</h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
                   {result.keyFindings.map((f, i) => {
-                    const sc = STATUS_COLORS[f.status] || STATUS_COLORS.unknown;
+                    const sc = statusColors[f.status] || statusColors.unknown;
                     return (
                       <div key={i} style={{
                         display: "flex", alignItems: "center", justifyContent: "space-between",
                         padding: "9px 0",
-                        borderBottom: i < result.keyFindings.length - 1 ? "1px solid var(--border)" : "none",
+                        borderBottom: i < result.keyFindings.length - 1 ? `1px solid ${borderColor}` : "none",
                       }}>
-                        <span style={{ fontSize: "0.875rem", color: "var(--text-secondary)", fontWeight: 500 }}>
+                        <span style={{ fontSize: "0.875rem", color: textSecondary, fontWeight: 500 }}>
                           {f.label}
                         </span>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                           <span style={{
                             fontFamily: "var(--font-mono)", fontSize: "0.8125rem",
-                            color: "var(--text-primary)", fontWeight: 600,
+                            color: textPrimary, fontWeight: 600,
                           }}>
                             {f.value}
                           </span>
                           <span style={{
+                            ...glassChip(sc.color.startsWith("#") ? sc.color : "#93A5BD"),
                             padding: "2px 8px", borderRadius: 100,
                             fontSize: "0.6875rem", fontWeight: 700,
-                            background: sc.bg, color: sc.color,
+                            color: sc.color,
                           }}>
                             {sc.label}
                           </span>
@@ -501,18 +474,11 @@ export default function UploadPlayground() {
               </div>
             )}
 
-            {/* Diagnoses */}
             {result.diagnoses.length > 0 && (
-              <div style={{
-                padding: "18px 20px",
-                background: "var(--bg-card)",
-                border: "1px solid var(--border)",
-                borderRadius: 16,
-                boxShadow: "var(--shadow-card)",
-              }}>
+              <div style={{ ...glassPanel, padding: "18px 20px", borderRadius: 16 }}>
                 <h3 style={{
                   fontFamily: "var(--font-display)", fontWeight: 700,
-                  fontSize: "0.9375rem", color: "var(--text-primary)", marginBottom: 14,
+                  fontSize: "0.9375rem", color: textPrimary, marginBottom: 14,
                 }}>
                   Diagnoses
                 </h3>
@@ -520,19 +486,20 @@ export default function UploadPlayground() {
                   <div key={i} style={{
                     display: "flex", gap: 12, alignItems: "flex-start",
                     padding: "8px 0",
-                    borderBottom: i < result.diagnoses.length - 1 ? "1px solid var(--border)" : "none",
+                    borderBottom: i < result.diagnoses.length - 1 ? `1px solid ${borderColor}` : "none",
                   }}>
                     {d.code && (
                       <span style={{
+                        ...glassChip(ACCENT),
                         fontFamily: "var(--font-mono)", fontSize: "0.8125rem",
                         padding: "3px 10px", borderRadius: 6,
-                        background: "var(--accent-light)", color: "var(--accent)",
+                        color: "#7DD3FC",
                         fontWeight: 600, flexShrink: 0,
                       }}>
                         {d.code}
                       </span>
                     )}
-                    <span style={{ fontSize: "0.875rem", color: "var(--text-secondary)", lineHeight: 1.5 }}>
+                    <span style={{ fontSize: "0.875rem", color: textSecondary, lineHeight: 1.5 }}>
                       {d.description}
                     </span>
                   </div>
@@ -540,30 +507,22 @@ export default function UploadPlayground() {
               </div>
             )}
 
-            {/* Medications */}
             {result.medications.length > 0 && (
-              <div style={{
-                padding: "18px 20px",
-                background: "var(--bg-card)",
-                border: "1px solid var(--border)",
-                borderRadius: 16,
-                boxShadow: "var(--shadow-card)",
-              }}>
+              <div style={{ ...glassPanel, padding: "18px 20px", borderRadius: 16 }}>
                 <h3 style={{
                   fontFamily: "var(--font-display)", fontWeight: 700,
-                  fontSize: "0.9375rem", color: "var(--text-primary)", marginBottom: 12,
+                  fontSize: "0.9375rem", color: textPrimary, marginBottom: 12,
                 }}>
                   Medications
                 </h3>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {result.medications.map((m, i) => (
                     <span key={i} style={{
+                      ...glassChip("#34D399"),
                       padding: "5px 12px",
-                      background: "rgba(13, 184, 122, 0.08)",
-                      border: "1px solid rgba(13, 184, 122, 0.18)",
                       borderRadius: 100,
                       fontSize: "0.8125rem",
-                      color: "#0a8f5e",
+                      color: "#6EE7B7",
                       fontWeight: 500,
                     }}>
                       💊 {m}
@@ -573,29 +532,21 @@ export default function UploadPlayground() {
               </div>
             )}
 
-            {/* Follow-up */}
             {result.followUp && (
-              <div style={{
-                padding: "14px 18px",
-                background: "rgba(245, 158, 11, 0.07)",
-                border: "1px solid rgba(245, 158, 11, 0.2)",
-                borderRadius: 12,
-              }}>
-                <div style={{ fontWeight: 700, fontSize: "0.8125rem", color: "#B45309", marginBottom: 6 }}>
+              <div style={{ ...glassChip("#FBBF24", 0.08), padding: "14px 18px", borderRadius: 12 }}>
+                <div style={{ fontWeight: 700, fontSize: "0.8125rem", color: "#FCD34D", marginBottom: 6 }}>
                   📅 Follow-up
                 </div>
-                <div style={{ fontSize: "0.875rem", color: "var(--text-secondary)" }}>{result.followUp}</div>
+                <div style={{ fontSize: "0.875rem", color: textSecondary }}>{result.followUp}</div>
               </div>
             )}
 
-            {/* Ask AI CTA */}
             <a
               href="/playground/insurance"
               style={{
+                ...glassButtonPrimary,
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 padding: "14px 20px",
-                background: "var(--accent)",
-                color: "white",
                 borderRadius: 12,
                 textDecoration: "none",
                 fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.9375rem",

@@ -2,6 +2,15 @@
 
 import { useState, useRef, useEffect } from "react";
 import PlaygroundShell from "@/components/playground/PlaygroundShell";
+import {
+  glassPanel,
+  glassPanelSoft,
+  glassButtonPrimary,
+  textPrimary,
+  textSecondary,
+  textMuted,
+  borderColor,
+} from "@/components/playground/glass";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -14,14 +23,14 @@ const QUICK_PROMPTS = [
   { label: "CPT 93000", desc: "ECG", prompt: "What is CPT 93000? Who bills it and when?" },
 ];
 
+const ACCENT = "#A78BFA"; // matches the "insurance" PlaygroundScene variant
+
 function formatMarkdown(text: string): React.ReactNode {
-  // Split on **bold** and render inline
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return <strong key={i}>{part.slice(2, -2)}</strong>;
     }
-    // Handle line breaks
     return <span key={i}>{part.split("\n").map((line, j, arr) => (
       <span key={j}>{line}{j < arr.length - 1 ? <br /> : null}</span>
     ))}</span>;
@@ -77,22 +86,23 @@ export default function InsurancePlayground() {
   };
 
   return (
-    <PlaygroundShell>
+    <PlaygroundShell variant="insurance">
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
           <div style={{
             width: 40, height: 40, borderRadius: 10,
-            background: "rgba(139, 92, 246, 0.1)",
+            background: "rgba(167, 139, 250, 0.16)",
+            border: "1px solid rgba(167, 139, 250, 0.3)",
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: "1.25rem",
           }}>🔬</div>
           <div>
             <h1 style={{
               fontFamily: "var(--font-display)", fontWeight: 700,
-              fontSize: "1.375rem", color: "var(--text-primary)", letterSpacing: "-0.02em",
+              fontSize: "1.375rem", color: textPrimary, letterSpacing: "-0.02em",
             }}>Insurance AI</h1>
-            <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", marginTop: 2 }}>
+            <p style={{ fontSize: "0.875rem", color: textMuted, marginTop: 2 }}>
               Powered by AxisMapper · ICD-10-CM 2026 · CPT · MS-DRG
             </p>
           </div>
@@ -100,68 +110,61 @@ export default function InsurancePlayground() {
       </div>
 
       <div style={{
+        ...glassPanel,
         display: "flex",
         flexDirection: "column",
         height: "calc(100vh - 260px)",
         minHeight: 480,
-        background: "var(--bg-card)",
-        border: "1px solid var(--border)",
         borderRadius: 18,
         overflow: "hidden",
-        boxShadow: "var(--shadow-card)",
       }}>
 
         {/* Messages area */}
         <div style={{ flex: 1, overflowY: "auto", padding: "24px 24px 12px" }}>
 
-          {/* Empty state */}
           {messages.length === 0 && (
             <div style={{ textAlign: "center", paddingTop: 40 }}>
               <div style={{ fontSize: "2.5rem", marginBottom: 12 }}>🔬</div>
               <h2 style={{
                 fontFamily: "var(--font-display)", fontWeight: 700,
-                fontSize: "1.125rem", color: "var(--text-primary)", marginBottom: 8,
+                fontSize: "1.125rem", color: textPrimary, marginBottom: 8,
               }}>
                 Ask about any medical code
               </h2>
-              <p style={{ fontSize: "0.9rem", color: "var(--text-muted)", maxWidth: 360, margin: "0 auto 32px" }}>
+              <p style={{ fontSize: "0.9rem", color: textMuted, maxWidth: 360, margin: "0 auto 32px" }}>
                 Type a code (E11.9, CPT 99213), describe a condition, or ask how insurance billing works.
               </p>
 
-              {/* Quick chips */}
-              <div style={{
-                display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center",
-              }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
                 {QUICK_PROMPTS.map((qp) => (
                   <button
                     key={qp.label}
                     onClick={() => send(qp.prompt)}
                     style={{
+                      ...glassPanelSoft,
                       display: "flex", alignItems: "center", gap: 8,
                       padding: "9px 16px",
-                      background: "var(--bg-subtle)",
-                      border: "1px solid var(--border)",
                       borderRadius: 100,
                       cursor: "pointer",
                       fontFamily: "var(--font-body)",
                       transition: "all 0.15s ease",
                     }}
                     onMouseEnter={e => {
-                      (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
-                      (e.currentTarget as HTMLElement).style.background = "var(--accent-light)";
+                      (e.currentTarget as HTMLElement).style.borderColor = ACCENT;
+                      (e.currentTarget as HTMLElement).style.background = "rgba(167, 139, 250, 0.14)";
                     }}
                     onMouseLeave={e => {
-                      (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-                      (e.currentTarget as HTMLElement).style.background = "var(--bg-subtle)";
+                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.08)";
+                      (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.05)";
                     }}
                   >
                     <span style={{
                       fontFamily: "var(--font-mono)", fontSize: "0.8125rem",
-                      fontWeight: 700, color: "var(--accent)",
+                      fontWeight: 700, color: "#C4B5FD",
                     }}>
                       {qp.label}
                     </span>
-                    <span style={{ fontSize: "0.8125rem", color: "var(--text-secondary)" }}>
+                    <span style={{ fontSize: "0.8125rem", color: textSecondary }}>
                       {qp.desc}
                     </span>
                   </button>
@@ -170,7 +173,6 @@ export default function InsurancePlayground() {
             </div>
           )}
 
-          {/* Message list */}
           {messages.map((msg, i) => (
             <div key={i} style={{
               display: "flex",
@@ -191,12 +193,11 @@ export default function InsurancePlayground() {
               <div style={{
                 maxWidth: "75%",
                 padding: "12px 16px",
-                borderRadius: msg.role === "user"
-                  ? "16px 16px 4px 16px"
-                  : "4px 16px 16px 16px",
-                background: msg.role === "user" ? "var(--accent)" : "var(--bg-subtle)",
-                border: msg.role === "assistant" ? "1px solid var(--border)" : "none",
-                color: msg.role === "user" ? "white" : "var(--text-primary)",
+                borderRadius: msg.role === "user" ? "16px 16px 4px 16px" : "4px 16px 16px 16px",
+                ...(msg.role === "user"
+                  ? { background: "rgba(167, 139, 250, 0.35)", border: "1px solid rgba(167, 139, 250, 0.4)" }
+                  : glassPanelSoft),
+                color: msg.role === "user" ? "#F5F3FF" : textPrimary,
                 fontSize: "0.9rem",
                 lineHeight: 1.6,
               }}>
@@ -205,7 +206,6 @@ export default function InsurancePlayground() {
             </div>
           ))}
 
-          {/* Loading */}
           {loading && (
             <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 16 }}>
               <div style={{
@@ -217,16 +217,15 @@ export default function InsurancePlayground() {
                 AI
               </div>
               <div style={{
+                ...glassPanelSoft,
                 padding: "12px 18px",
-                background: "var(--bg-subtle)",
-                border: "1px solid var(--border)",
                 borderRadius: "4px 16px 16px 16px",
                 display: "flex", gap: 5, alignItems: "center",
               }}>
                 {[0, 1, 2].map(i => (
                   <div key={i} style={{
                     width: 6, height: 6, borderRadius: "50%",
-                    background: "var(--accent)",
+                    background: ACCENT,
                     animation: `pulse 1.2s ease-in-out ${i * 0.2}s infinite`,
                     opacity: 0.6,
                   }} />
@@ -238,34 +237,32 @@ export default function InsurancePlayground() {
           <div ref={bottomRef} />
         </div>
 
-        {/* Quick chips after first message */}
         {messages.length > 0 && !loading && (
           <div style={{
             padding: "8px 16px",
-            borderTop: "1px solid var(--border)",
+            borderTop: `1px solid ${borderColor}`,
             display: "flex", gap: 6, overflowX: "auto",
-            background: "var(--bg-primary)",
           }}>
             {QUICK_PROMPTS.slice(0, 4).map((qp) => (
               <button
                 key={qp.label}
                 onClick={() => send(qp.prompt)}
                 style={{
+                  ...glassPanelSoft,
                   display: "flex", alignItems: "center", gap: 6,
                   padding: "5px 12px", flexShrink: 0,
-                  background: "white", border: "1px solid var(--border)",
                   borderRadius: 100, cursor: "pointer",
                   fontFamily: "var(--font-body)", fontSize: "0.8125rem",
                   transition: "all 0.15s ease",
                 }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
+                  (e.currentTarget as HTMLElement).style.borderColor = ACCENT;
                 }}
                 onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.08)";
                 }}
               >
-                <span style={{ fontFamily: "var(--font-mono)", fontWeight: 700, color: "var(--accent)", fontSize: "0.75rem" }}>{qp.label}</span>
+                <span style={{ fontFamily: "var(--font-mono)", fontWeight: 700, color: "#C4B5FD", fontSize: "0.75rem" }}>{qp.label}</span>
               </button>
             ))}
           </div>
@@ -274,8 +271,7 @@ export default function InsurancePlayground() {
         {/* Input bar */}
         <div style={{
           padding: "14px 16px",
-          borderTop: "1px solid var(--border)",
-          background: "white",
+          borderTop: `1px solid ${borderColor}`,
           display: "flex", gap: 10, alignItems: "flex-end",
         }}>
           <textarea
@@ -286,25 +282,26 @@ export default function InsurancePlayground() {
             placeholder="Ask about an ICD-10 code, CPT code, or describe a condition..."
             rows={1}
             style={{
-              flex: 1, resize: "none", border: "1.5px solid var(--border)",
+              ...glassPanelSoft,
+              flex: 1, resize: "none",
               borderRadius: 12, padding: "11px 14px",
               fontFamily: "var(--font-body)", fontSize: "0.9375rem",
-              color: "var(--text-primary)", background: "var(--bg-primary)",
+              color: textPrimary,
               outline: "none", lineHeight: 1.5,
               transition: "border-color 0.15s ease",
               maxHeight: 120,
               overflowY: "auto",
             }}
-            onFocus={e => (e.target.style.borderColor = "var(--accent)")}
-            onBlur={e => (e.target.style.borderColor = "var(--border)")}
+            onFocus={e => (e.target.style.borderColor = ACCENT)}
+            onBlur={e => (e.target.style.borderColor = "rgba(255, 255, 255, 0.08)")}
           />
           <button
             onClick={() => send()}
             disabled={!input.trim() || loading}
             style={{
+              ...(input.trim() && !loading ? glassButtonPrimary : glassPanelSoft),
               width: 42, height: 42, borderRadius: 12, flexShrink: 0,
-              background: input.trim() && !loading ? "var(--accent)" : "var(--border)",
-              border: "none", cursor: input.trim() && !loading ? "pointer" : "default",
+              cursor: input.trim() && !loading ? "pointer" : "default",
               display: "flex", alignItems: "center", justifyContent: "center",
               transition: "all 0.15s ease",
             }}
