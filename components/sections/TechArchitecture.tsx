@@ -35,7 +35,7 @@ export default function TechArchitecture() {
       <Reveal delayMs={420} className="mt-8 panel rounded-2xl p-6 flex items-center justify-between gap-4 flex-wrap">
         <div>
           <span className="eyebrow">Open source model</span>
-          <p className="font-display font-medium text-foam mt-1">AxisMapper — ICD-10 & insurance intelligence</p>
+          <p className="font-display font-medium text-foam mt-1">ICD-10 & insurance intelligence</p>
           <p className="text-mist text-xs mt-1">Published on HuggingFace · Apache 2.0</p>
         </div>
         <a

@@ -1,12 +1,74 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════════════════════
+   TOKENS
+   Dark tokens (color-scheme, --font-*) come from next/font + this
+   file. --font-display / --font-body / --font-mono are NOT redefined
+   here — they're set on <html> by next/font in app/layout.tsx
+   (Fraunces / Inter / IBM Plex Mono). Redefining them in :root
+   previously caused a silent conflict with the old Google Fonts
+   @import (Plus Jakarta Sans) — removed.
+   The legacy light-theme variables below are kept for any
+   not-yet-converted component (e.g. Footer/Navbar) that still
+   references them — harmless to keep, nothing here overrides them.
+   ═══════════════════════════════════════════════════════════════ */
 
 :root {
   color-scheme: dark;
+
+  /* Legacy light-theme palette — kept for any component still using it */
+  --bg-primary: #F7F9FC;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #EEF5FD;
+  --bg-deep: #0A1628;
+
+  --accent: #1A6BFF;
+  --accent-light: #EBF1FF;
+  --accent-hover: #1458D6;
+  --accent-emerald: #0DB87A;
+  --accent-amber: #F59E0B;
+  --accent-rose: #F43F5E;
+
+  --text-primary: #0D1B2E;
+  --text-secondary: #3D5166;
+  --text-muted: #7A8FA6;
+  --text-inverse: #FFFFFF;
+
+  --border: #DDE5EF;
+  --border-strong: #B8C9DC;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --shadow-card: 0 2px 8px rgba(13, 27, 46, 0.06), 0 0 1px rgba(13, 27, 46, 0.08);
+  --shadow-elevated: 0 8px 32px rgba(13, 27, 46, 0.10), 0 0 1px rgba(13, 27, 46, 0.06);
+  --shadow-float: 0 20px 60px rgba(13, 27, 46, 0.14), 0 0 1px rgba(13, 27, 46, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #1a6bff40 transparent;
+}
+
+/* Section-to-section snap scrolling — home page only. Scoped to
+   .section-shell (used exclusively by the 9 home-page sections in
+   components/sections/*), so /playground, /features, and every other
+   route keep normal free scrolling: with no snap-align targets present,
+   scroll-snap-type on <html> has no effect there.
+   scroll-snap-stop:always stops the snap at every section even on a
+   fast trackpad fling, instead of skipping past one. */
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html,
@@ -16,15 +78,24 @@ body {
   overflow-x: hidden;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #1a6bff40 transparent;
+body {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  font-size: 16px;
 }
 
 ::selection {
   background: #1a6bff66;
   color: #eaf2fb;
 }
+::-moz-selection {
+  background: #1a6bff66;
+  color: #eaf2fb;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   3D SITE — canvas layer, sections, panels
+   ═══════════════════════════════════════════════════════════════ */
 
 .canvas-fixed {
   position: fixed;
@@ -36,50 +107,8 @@ body {
 .section-shell {
   position: relative;
   z-index: 10;
-}
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  color-scheme: dark;
-}
-
-html,
-body {
-  background: #050b14;
-  color: #eaf2fb;
-  overflow-x: hidden;
-}
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #1a6bff40 transparent;
-}
-
-::selection {
-  background: #1a6bff66;
-  color: #eaf2fb;
-}
-
-.canvas-fixed {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.section-shell {
-  position: relative;
-  z-index: 10;
-}
-
-.panel {
-  background: rgba(6, 14, 26, 0.82);
-  backdrop-filter: blur(26px);
-  -webkit-backdrop-filter: blur(26px);
-  border: 1px solid rgba(234, 242, 251, 0.1);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .section-shell h1,
@@ -90,6 +119,13 @@ body {
 
 .section-shell p {
   text-shadow: 0 1px 12px rgba(5, 11, 20, 0.7);
+}
+
+.panel {
+  background: rgba(6, 14, 26, 0.82);
+  backdrop-filter: blur(26px);
+  -webkit-backdrop-filter: blur(26px);
+  border: 1px solid rgba(234, 242, 251, 0.1);
 }
 
 .eyebrow {
@@ -105,15 +141,6 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 }
 
 /* Reveal-on-scroll base state; toggled via IntersectionObserver in useReveal */
@@ -142,195 +169,23 @@ body {
   }
 }
 
-:root {
-  color-scheme: dark;
-}
-
-html,
-body {
-  background: #050b14;
-  color: #eaf2fb;
-  overflow-x: hidden;
-}
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #1a6bff40 transparent;
-}
-
-::selection {
-  background: #1a6bff66;
-  color: #eaf2fb;
-}
-
-.canvas-fixed {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.section-shell {
-  position: relative;
-  z-index: 10;
-}
-
-.panel {
-  background: rgba(6, 14, 26, 0.82);
-  backdrop-filter: blur(26px);
-  -webkit-backdrop-filter: blur(26px);
-  border: 1px solid rgba(234, 242, 251, 0.1);
-}
-
-.section-shell h1,
-.section-shell h2,
-.section-shell h3 {
-  text-shadow: 0 2px 24px rgba(5, 11, 20, 0.85), 0 1px 2px rgba(5, 11, 20, 0.6);
-}
-
-.section-shell p {
-  text-shadow: 0 1px 12px rgba(5, 11, 20, 0.7);
-}
-
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #6fa8ff;
-}
-
-.gradient-current {
-  background: linear-gradient(135deg, #1a6bff, #0db87a);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* Reveal-on-scroll base state; toggled via IntersectionObserver in useReveal */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.panel {
-  background: rgba(10, 22, 40, 0.52);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(234, 242, 251, 0.08);
-}
-
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #6fa8ff;
-}
-
-.gradient-current {
-  background: linear-gradient(135deg, #1a6bff, #0db87a);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  html {
+    scroll-snap-type: none;
   }
 }
 
-/* Reveal-on-scroll base state; toggled via IntersectionObserver in useReveal */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-
-:root {
-  /* Core palette */
-  --bg-primary: #F7F9FC;
-  --bg-card: #FFFFFF;
-  --bg-subtle: #EEF5FD;
-  --bg-deep: #0A1628;
-
-  /* Brand */
-  --accent: #1A6BFF;
-  --accent-light: #EBF1FF;
-  --accent-hover: #1458D6;
-  --accent-emerald: #0DB87A;
-  --accent-amber: #F59E0B;
-  --accent-rose: #F43F5E;
-
-  /* Text */
-  --text-primary: #0D1B2E;
-  --text-secondary: #3D5166;
-  --text-muted: #7A8FA6;
-  --text-inverse: #FFFFFF;
-
-  /* Border */
-  --border: #DDE5EF;
-  --border-strong: #B8C9DC;
-
-  /* Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-
-  /* Shadows */
-  --shadow-card: 0 2px 8px rgba(13, 27, 46, 0.06), 0 0 1px rgba(13, 27, 46, 0.08);
-  --shadow-elevated: 0 8px 32px rgba(13, 27, 46, 0.10), 0 0 1px rgba(13, 27, 46, 0.06);
-  --shadow-float: 0 20px 60px rgba(13, 27, 46, 0.14), 0 0 1px rgba(13, 27, 46, 0.06);
-
-  /* Fonts */
-  --font-display: 'Plus Jakarta Sans', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  font-family: var(--font-body);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  line-height: 1.6;
-  font-size: 16px;
-}
+/* ═══════════════════════════════════════════════════════════════
+   LEGACY LIGHT-THEME UTILITIES
+   Kept for any not-yet-converted component. None of these class
+   names collide with the dark-theme rules above.
+   ═══════════════════════════════════════════════════════════════ */
 
 /* Sonar pulse — the signature background animation */
 @keyframes sonar-pulse {
@@ -383,7 +238,6 @@ body {
 .delay-500 { animation-delay: 0.50s; }
 .delay-600 { animation-delay: 0.60s; }
 
-/* Sonar rings */
 .sonar-ring {
   position: absolute;
   border-radius: 50%;
@@ -392,7 +246,6 @@ body {
   animation: sonar-ring 3s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
-/* Typography utilities */
 .display-xl {
   font-family: var(--font-display);
   font-size: clamp(2.8rem, 5.5vw, 4.5rem);
@@ -444,7 +297,6 @@ body {
   font-size: 0.875rem;
 }
 
-/* Accent gradient text */
 .gradient-text {
   background: linear-gradient(135deg, #1A6BFF 0%, #0DB87A 100%);
   -webkit-background-clip: text;
@@ -452,7 +304,6 @@ body {
   background-clip: text;
 }
 
-/* Card base */
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -466,7 +317,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* Button base */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -535,7 +385,6 @@ body {
   background: var(--accent-light);
 }
 
-/* Section spacing */
 .section-pad {
   padding: 96px 0;
 }
@@ -550,27 +399,11 @@ body {
   padding: 0 24px;
 }
 
-/* Eyebrow tag */
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  background: var(--accent-light);
-  color: var(--accent);
-  border-radius: 100px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  margin-bottom: 20px;
-}
-
 .eyebrow-emerald {
   background: rgba(13, 184, 122, 0.1);
   color: var(--accent-emerald);
 }
 
-/* Feature icon wrapper */
 .feature-icon {
   width: 52px;
   height: 52px;
@@ -584,7 +417,6 @@ body {
   flex-shrink: 0;
 }
 
-/* Stat number */
 .stat-number {
   font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3.25rem);
@@ -594,14 +426,12 @@ body {
   line-height: 1;
 }
 
-/* Divider */
 .divider {
   height: 1px;
   background: var(--border);
   width: 100%;
 }
 
-/* Badge */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -624,46 +454,31 @@ body {
   color: #B45309;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
 
-/* Focus ring */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Mobile responsive helpers */
 @media (max-width: 768px) {
   .section-pad { padding: 64px 0; }
   .section-pad-sm { padding: 40px 0; }
   .container { padding: 0 16px; }
+
+  a, button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .display-xl { font-size: clamp(2rem, 8vw, 3.5rem); }
+  .display-lg { font-size: clamp(1.75rem, 6vw, 2.5rem); }
+  .display-md { font-size: clamp(1.25rem, 5vw, 1.75rem); }
+
+  .btn-primary, .btn-secondary {
+    justify-content: center;
+  }
+
+  .playground-sidebar { display: none; }
 }
 
-/* ─── Sprint 4: Polish & Performance ──────────────────────────── */
-
-/* Text selection color */
-::selection {
-  background: rgba(26, 107, 255, 0.15);
-  color: var(--text-primary);
-}
-::-moz-selection {
-  background: rgba(26, 107, 255, 0.15);
-  color: var(--text-primary);
-}
-
-/* Skeleton loader animation */
 @keyframes skeleton-shimmer {
   0%   { background-position: -600px 0; }
   100% { background-position: 600px 0; }
@@ -681,40 +496,14 @@ body {
   border-radius: var(--radius-sm);
 }
 
-/* Smooth image loading */
 img {
   content-visibility: auto;
 }
 
-/* Prevent layout shift on fonts */
-html {
-  font-display: swap;
-}
-
-/* Better tap targets on mobile */
-@media (max-width: 768px) {
-  a, button {
-    min-height: 44px;
-    min-width: 44px;
-  }
-
-  /* Tighter display sizes on small screens */
-  .display-xl { font-size: clamp(2rem, 8vw, 3.5rem); }
-  .display-lg { font-size: clamp(1.75rem, 6vw, 2.5rem); }
-  .display-md { font-size: clamp(1.25rem, 5vw, 1.75rem); }
-
-  /* Full-width buttons on mobile */
-  .btn-primary, .btn-secondary {
-    justify-content: center;
-  }
-}
-
-/* Announcement banner offset — adjust navbar & page hero top padding */
 .with-banner-offset {
   scroll-margin-top: 108px; /* 40px banner + 68px navbar */
 }
 
-/* Tooltip base */
 [data-tooltip] {
   position: relative;
 }
@@ -740,9 +529,7 @@ html {
   opacity: 1;
 }
 
-/* ─── Print styles ─────────────────────────────────────────────── */
 @media print {
-  /* Hide UI chrome */
   header, footer, .btn-primary, .btn-secondary,
   [class*="playground"], nav, button,
   [style*="position: fixed"] {
@@ -771,9 +558,6 @@ html {
   }
 }
 
-/* ─── Accessibility ─────────────────────────────────────────────── */
-
-/* Skip to main content link */
 .skip-to-content {
   position: absolute;
   top: -100px;
@@ -791,7 +575,6 @@ html {
   top: 0;
 }
 
-/* Visually hidden but accessible */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -804,7 +587,6 @@ html {
   border-width: 0;
 }
 
-/* High contrast mode support */
 @media (forced-colors: active) {
   .btn-primary, .btn-secondary {
     border: 2px solid ButtonText;
@@ -814,13 +596,6 @@ html {
   }
 }
 
-/* ─── Playground mobile polish ──────────────────────────────────── */
-@media (max-width: 768px) {
-  /* Playground sidebar hidden → bottom tab */
-  .playground-sidebar { display: none; }
-}
-
-/* ─── Smooth page transitions ───────────────────────────────────── */
 @keyframes page-enter {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -830,7 +605,6 @@ main {
   animation: page-enter 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ─── Code blocks ─────────────────────────────────────────────── */
 pre, code {
   font-family: var(--font-mono);
   font-size: 0.875rem;
@@ -857,7 +631,8 @@ pre code {
   font-size: inherit;
 }
 
-/* ─── Horizontal scroll snap (mobile feature cards) ──────────────── */
+/* Horizontal scroll snap (mobile feature cards) — unrelated to the
+   vertical home-page snap above; different axis, no conflict. */
 .scroll-snap-x {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -866,7 +641,6 @@ pre code {
   scroll-snap-align: start;
 }
 
-/* ─── Number counter animation ──────────────────────────────────── */
 @keyframes number-pop {
   0%   { opacity: 0; transform: scale(0.8) translateY(10px); }
   60%  { transform: scale(1.04) translateY(-2px); }
@@ -877,7 +651,6 @@ pre code {
   animation: number-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ─── Focus improvements ─────────────────────────────────────────── */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -888,7 +661,6 @@ select:focus-visible {
   border-radius: 4px;
 }
 
-/* Remove default focus on mouse click */
 :focus:not(:focus-visible) {
   outline: none;
 }
