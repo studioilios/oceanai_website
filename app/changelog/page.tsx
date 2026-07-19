@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import CompanyShell from "@/components/company/CompanyShell";
+import ChangelogScene from "@/components/canvas/scenes/ChangelogScene";
+import { glassPanel, glassChip, textPrimary, textSecondary, textMuted, borderColor } from "@/components/features/glass";
 
 export const metadata: Metadata = {
   title: "Changelog — OceanAI",
@@ -8,10 +11,7 @@ export const metadata: Metadata = {
 
 const RELEASES = [
   {
-    version: "2.0.0",
-    date: "June 2026",
-    type: "major",
-    label: "Major release",
+    version: "2.0.0", date: "June 2026", type: "major", label: "Major release",
     headline: "Website v2 — full product site + interactive playground",
     changes: [
       { type: "new", text: "Complete website redesign — investor-grade, light mode, sonar animation" },
@@ -24,10 +24,7 @@ const RELEASES = [
     ],
   },
   {
-    version: "1.5.0",
-    date: "May 2026",
-    type: "minor",
-    label: "Feature release",
+    version: "1.5.0", date: "May 2026", type: "minor", label: "Feature release",
     headline: "Family Connect + Blood Donor network",
     changes: [
       { type: "new", text: "Family Connect — link family member accounts with consent-based access" },
@@ -38,10 +35,7 @@ const RELEASES = [
     ],
   },
   {
-    version: "1.4.0",
-    date: "April 2026",
-    type: "minor",
-    label: "Feature release",
+    version: "1.4.0", date: "April 2026", type: "minor", label: "Feature release",
     headline: "On-device Local LLM — full offline mode",
     changes: [
       { type: "new", text: "MediaPipe C++ native bridge — Gemma-2B running fully on-device" },
@@ -51,10 +45,7 @@ const RELEASES = [
     ],
   },
   {
-    version: "1.3.0",
-    date: "March 2026",
-    type: "minor",
-    label: "Feature release",
+    version: "1.3.0", date: "March 2026", type: "minor", label: "Feature release",
     headline: "AxisMapper v1 — Insurance AI open-sourced",
     changes: [
       { type: "new", text: "AxisMapper fine-tuned model published on HuggingFace under Apache 2.0" },
@@ -64,10 +55,7 @@ const RELEASES = [
     ],
   },
   {
-    version: "1.2.0",
-    date: "February 2026",
-    type: "minor",
-    label: "Feature release",
+    version: "1.2.0", date: "February 2026", type: "minor", label: "Feature release",
     headline: "Voice AI + Wake word",
     changes: [
       { type: "new", text: "Wake word activation — trigger AI without touching your phone" },
@@ -77,10 +65,7 @@ const RELEASES = [
     ],
   },
   {
-    version: "1.1.0",
-    date: "January 2026",
-    type: "minor",
-    label: "Feature release",
+    version: "1.1.0", date: "January 2026", type: "minor", label: "Feature release",
     headline: "Watch Integration + Organ Health",
     changes: [
       { type: "new", text: "Watch integration — real-time HR, SpO2, HRV, steps, sleep quality" },
@@ -90,10 +75,7 @@ const RELEASES = [
     ],
   },
   {
-    version: "1.0.0",
-    date: "December 2025",
-    type: "major",
-    label: "Launch",
+    version: "1.0.0", date: "December 2025", type: "major", label: "Launch",
     headline: "OceanAI launches on iOS and Android",
     changes: [
       { type: "new", text: "Initial release — iOS App Store + Google Play" },
@@ -105,121 +87,51 @@ const RELEASES = [
   },
 ];
 
-const TYPE_STYLES: Record<string, { bg: string; color: string }> = {
-  major:    { bg: "rgba(26,107,255,0.1)",   color: "var(--accent)" },
-  minor:    { bg: "rgba(13,184,122,0.1)",   color: "#0DB87A" },
-  patch:    { bg: "rgba(122,143,166,0.1)",  color: "var(--text-muted)" },
-};
-
+const TYPE_COLOR: Record<string, string> = { major: "#38BDF8", minor: "#34D399", patch: "#94A3B8" };
 const CHANGE_ICONS: Record<string, { icon: string; color: string }> = {
-  new:      { icon: "✦", color: "var(--accent)" },
-  improved: { icon: "↑", color: "#0DB87A" },
-  fixed:    { icon: "✓", color: "#B45309" },
+  new: { icon: "✦", color: "#7DD3FC" },
+  improved: { icon: "↑", color: "#6EE7B7" },
+  fixed: { icon: "✓", color: "#FCD34D" },
 };
 
 export default function ChangelogPage() {
   return (
-    <>
-      {/* Hero */}
-      <section style={{
-        paddingTop: 140, paddingBottom: 72,
-        background: "linear-gradient(160deg, #F7F9FC 0%, #EEF5FD 100%)",
-        borderBottom: "1px solid var(--border)",
-      }}>
+    <CompanyShell scene={<ChangelogScene />}>
+      <section className="relative z-10" style={{ paddingTop: 140, paddingBottom: 60, borderBottom: `1px solid ${borderColor}` }}>
         <div className="container" style={{ maxWidth: 760 }}>
-          <div className="eyebrow" style={{ display: "inline-flex", marginBottom: 20 }}>
+          <div style={{ display: "inline-flex", ...glassChip("#A78BFA"), padding: "5px 14px", borderRadius: 100, color: "#C4B5FD", fontSize: "0.8125rem", fontWeight: 600, marginBottom: 20 }}>
             Built in public
           </div>
-          <h1 className="display-xl" style={{ marginBottom: 20 }}>Changelog</h1>
-          <p className="body-lg" style={{ maxWidth: 520 }}>
+          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(2rem, 4.5vw, 3.25rem)", color: textPrimary, marginBottom: 20, textShadow: "0 2px 24px rgba(5,11,20,0.85)" }}>Changelog</h1>
+          <p style={{ fontSize: "1.0625rem", color: textSecondary, maxWidth: 520 }}>
             Every release, every feature, every fix. OceanAI ships continuously — this is the public record.
           </p>
         </div>
       </section>
 
-      {/* Releases timeline */}
-      <section className="section-pad" style={{ background: "var(--bg-primary)" }}>
+      <section className="relative z-10" style={{ padding: "72px 0" }}>
         <div className="container" style={{ maxWidth: 760 }}>
           <div style={{ position: "relative" }}>
-            {/* Timeline line */}
-            <div style={{
-              position: "absolute",
-              left: 0, top: 8, bottom: 0,
-              width: 1,
-              background: "var(--border)",
-            }} />
-
+            <div style={{ position: "absolute", left: 0, top: 8, bottom: 0, width: 1, background: borderColor }} />
             <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
               {RELEASES.map((release, i) => {
-                const ts = TYPE_STYLES[release.type] || TYPE_STYLES.minor;
+                const tc = TYPE_COLOR[release.type] || TYPE_COLOR.minor;
                 return (
-                  <div key={release.version} style={{
-                    paddingLeft: 36,
-                    paddingBottom: i < RELEASES.length - 1 ? 56 : 0,
-                    position: "relative",
-                  }}>
-                    {/* Timeline dot */}
-                    <div style={{
-                      position: "absolute",
-                      left: -6,
-                      top: 6,
-                      width: 13, height: 13,
-                      borderRadius: "50%",
-                      background: release.type === "major" ? "var(--accent)" : "var(--bg-card)",
-                      border: `2px solid ${release.type === "major" ? "var(--accent)" : "var(--border-strong)"}`,
-                    }} />
-
-                    {/* Version + date + badge */}
+                  <div key={release.version} style={{ paddingLeft: 36, paddingBottom: i < RELEASES.length - 1 ? 56 : 0, position: "relative" }}>
+                    <div style={{ position: "absolute", left: -6, top: 6, width: 13, height: 13, borderRadius: "50%", background: release.type === "major" ? tc : "#0f2038", border: `2px solid ${tc}` }} />
                     <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10, flexWrap: "wrap" }}>
-                      <span style={{
-                        fontFamily: "var(--font-mono)", fontWeight: 700,
-                        fontSize: "1.0625rem", color: "var(--text-primary)",
-                        letterSpacing: "-0.01em",
-                      }}>
-                        v{release.version}
-                      </span>
-                      <span style={{
-                        ...ts,
-                        padding: "2px 10px", borderRadius: 100,
-                        fontSize: "0.6875rem", fontWeight: 700,
-                        letterSpacing: "0.05em", textTransform: "uppercase",
-                      }}>
-                        {release.label}
-                      </span>
-                      <span style={{
-                        fontSize: "0.8125rem", color: "var(--text-muted)", fontWeight: 500,
-                      }}>
-                        {release.date}
-                      </span>
+                      <span style={{ fontFamily: "var(--font-mono)", fontWeight: 700, fontSize: "1.0625rem", color: textPrimary, letterSpacing: "-0.01em" }}>v{release.version}</span>
+                      <span style={{ ...glassChip(tc, 0.16), padding: "2px 10px", borderRadius: 100, fontSize: "0.6875rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", color: tc }}>{release.label}</span>
+                      <span style={{ fontSize: "0.8125rem", color: textMuted, fontWeight: 500 }}>{release.date}</span>
                     </div>
-
-                    {/* Headline */}
-                    <h2 style={{
-                      fontFamily: "var(--font-display)", fontWeight: 700,
-                      fontSize: "1.125rem", color: "var(--text-primary)",
-                      letterSpacing: "-0.015em", marginBottom: 16,
-                    }}>
-                      {release.headline}
-                    </h2>
-
-                    {/* Changes */}
+                    <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.125rem", color: textPrimary, letterSpacing: "-0.015em", marginBottom: 16 }}>{release.headline}</h2>
                     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                       {release.changes.map((change, j) => {
                         const ci = CHANGE_ICONS[change.type] || CHANGE_ICONS.new;
                         return (
                           <div key={j} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-                            <span style={{
-                              fontFamily: "var(--font-mono)", fontSize: "0.875rem",
-                              fontWeight: 700, color: ci.color, flexShrink: 0, marginTop: 1,
-                              width: 14, textAlign: "center",
-                            }}>
-                              {ci.icon}
-                            </span>
-                            <span style={{
-                              fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.55,
-                            }}>
-                              {change.text}
-                            </span>
+                            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.875rem", fontWeight: 700, color: ci.color, flexShrink: 0, marginTop: 1, width: 14, textAlign: "center" }}>{ci.icon}</span>
+                            <span style={{ fontSize: "0.9rem", color: textSecondary, lineHeight: 1.55 }}>{change.text}</span>
                           </div>
                         );
                       })}
@@ -230,44 +142,18 @@ export default function ChangelogPage() {
             </div>
           </div>
 
-          {/* Bottom — stay updated */}
-          <div style={{
-            marginTop: 64,
-            padding: "28px 32px",
-            background: "var(--bg-card)",
-            border: "1px solid var(--border)",
-            borderRadius: 18,
-            boxShadow: "var(--shadow-card)",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            flexWrap: "wrap", gap: 16,
-          }}>
+          <div style={{ ...glassPanel, marginTop: 64, padding: "28px 32px", borderRadius: 18, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
             <div>
-              <div style={{
-                fontFamily: "var(--font-display)", fontWeight: 700,
-                fontSize: "1rem", color: "var(--text-primary)", marginBottom: 4,
-              }}>
-                Want to follow along?
-              </div>
-              <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)" }}>
-                We ship continuously. Star us on GitHub or follow Studio ILLIOS for updates.
-              </p>
+              <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1rem", color: textPrimary, marginBottom: 4 }}>Want to follow along?</div>
+              <p style={{ fontSize: "0.875rem", color: textSecondary }}>We ship continuously. Star us on GitHub or follow Studio ILLIOS for updates.</p>
             </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              <a
-                href="https://github.com/studioilios"
-                target="_blank" rel="noopener noreferrer"
-                className="btn-secondary"
-                style={{ padding: "10px 20px", fontSize: "0.875rem" }}
-              >
-                GitHub ↗
-              </a>
-              <Link href="/contact-us" className="btn-primary" style={{ padding: "10px 20px", fontSize: "0.875rem" }}>
-                Contact us
-              </Link>
+              <a href="https://github.com/studioilios" target="_blank" rel="noopener noreferrer" style={{ padding: "10px 20px", fontSize: "0.875rem", background: "rgba(255,255,255,0.06)", border: `1px solid ${borderColor}`, color: textPrimary, borderRadius: 100, textDecoration: "none", fontFamily: "var(--font-display)", fontWeight: 600 }}>GitHub ↗</a>
+              <Link href="/contact-us" style={{ padding: "10px 20px", fontSize: "0.875rem", background: "linear-gradient(135deg, rgba(56,189,248,0.55), rgba(52,211,153,0.55))", backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)", border: "1px solid rgba(255,255,255,0.18)", color: "#F5F9FF", borderRadius: 100, textDecoration: "none", fontFamily: "var(--font-display)", fontWeight: 600 }}>Contact us</Link>
             </div>
           </div>
         </div>
       </section>
-    </>
+    </CompanyShell>
   );
 }

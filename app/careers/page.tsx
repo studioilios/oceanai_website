@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import CompanyShell from "@/components/company/CompanyShell";
+import CareersScene from "@/components/canvas/scenes/CareersScene";
+import { glassPanel, glassChip, textPrimary, textSecondary, textMuted, borderColor } from "@/components/features/glass";
 
 export const metadata: Metadata = {
   title: "Careers — OceanAI · Studio ILLIOS",
@@ -37,36 +40,27 @@ const OPEN_ROLES = [
 ];
 
 const TEAM_COLOR: Record<string, string> = {
-  Mobile:  "#1A6BFF",
-  AI:      "#7C3AED",
-  Backend: "#0DB87A",
-  Design:  "#F59E0B",
+  Mobile: "#38BDF8",
+  AI: "#A78BFA",
+  Backend: "#34D399",
+  Design: "#FBBF24",
 };
 
 export default function CareersPage() {
   return (
-    <>
+    <CompanyShell scene={<CareersScene />}>
       {/* Hero */}
-      <section style={{
-        paddingTop: 140, paddingBottom: 80,
-        background: "linear-gradient(160deg, #0A1628 0%, #1a2a44 100%)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-        position: "relative", overflow: "hidden",
-      }}>
-        <div style={{
-          position: "absolute", inset: 0,
-          backgroundImage: `linear-gradient(rgba(26,107,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(26,107,255,0.04) 1px, transparent 1px)`,
-          backgroundSize: "48px 48px", pointerEvents: "none",
-        }} />
-        <div className="container" style={{ maxWidth: 820, position: "relative" }}>
-          <div style={{ display: "inline-flex", padding: "5px 14px", borderRadius: 100, background: "rgba(13,184,122,0.12)", border: "1px solid rgba(13,184,122,0.25)", color: "#4ADE80", fontSize: "0.8125rem", fontWeight: 600, marginBottom: 20 }}>
+      <section className="relative z-10" style={{ paddingTop: 140, paddingBottom: 72, borderBottom: `1px solid ${borderColor}` }}>
+        <div className="container" style={{ maxWidth: 820 }}>
+          <div style={{ display: "inline-flex", ...glassChip("#34D399"), padding: "5px 14px", borderRadius: 100, color: "#6EE7B7", fontSize: "0.8125rem", fontWeight: 600, marginBottom: 20 }}>
             We&apos;re hiring
           </div>
-          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(2rem, 4.5vw, 3.25rem)", color: "white", letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 20 }}>
-            Build the future of<br />
-            <span style={{ background: "linear-gradient(135deg, #1A6BFF, #0DB87A)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>personal health AI.</span>
+          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(2rem, 4.5vw, 3.25rem)", color: textPrimary, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 20, textShadow: "0 2px 24px rgba(5,11,20,0.85)" }}>
+            Build the future of
+            <br />
+            <span style={{ background: "linear-gradient(135deg, #38BDF8, #34D399)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>personal health AI.</span>
           </h1>
-          <p style={{ fontSize: "1.0625rem", color: "rgba(255,255,255,0.5)", maxWidth: 560, lineHeight: 1.7, marginBottom: 36 }}>
+          <p style={{ fontSize: "1.0625rem", color: textSecondary, maxWidth: 560, lineHeight: 1.7, marginBottom: 36 }}>
             Studio ILLIOS is a small, focused team building AI-native health infrastructure. We ship fast, own what we build, and work on problems that actually matter. India-based, globally distributed.
           </p>
           <div style={{ display: "flex", gap: 32, flexWrap: "wrap" }}>
@@ -74,10 +68,10 @@ export default function CareersPage() {
               { num: "Small team", label: "High ownership, no bureaucracy" },
               { num: "Remote-first", label: "Work from anywhere in India" },
               { num: "Real AI", label: "Not wrappers — actual models" },
-            ].map(s => (
+            ].map((s) => (
               <div key={s.num}>
-                <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.125rem", color: "white", marginBottom: 3 }}>{s.num}</div>
-                <div style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,0.4)" }}>{s.label}</div>
+                <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.125rem", color: textPrimary, marginBottom: 3 }}>{s.num}</div>
+                <div style={{ fontSize: "0.8125rem", color: textMuted }}>{s.label}</div>
               </div>
             ))}
           </div>
@@ -85,48 +79,44 @@ export default function CareersPage() {
       </section>
 
       {/* Open roles */}
-      <section className="section-pad" style={{ background: "var(--bg-primary)" }}>
+      <section className="relative z-10" style={{ padding: "72px 0" }}>
         <div className="container" style={{ maxWidth: 860 }}>
           <div style={{ marginBottom: 40 }}>
-            <div className="eyebrow" style={{ display: "inline-flex", marginBottom: 16 }}>Open roles</div>
-            <h2 className="display-md">We&apos;re looking for builders.</h2>
+            <div style={{ display: "inline-flex", ...glassChip("#38BDF8"), padding: "5px 14px", borderRadius: 100, color: "#7DD3FC", fontSize: "0.8125rem", fontWeight: 600, marginBottom: 16 }}>Open roles</div>
+            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.8rem", color: textPrimary, textShadow: "0 2px 20px rgba(5,11,20,0.8)" }}>We&apos;re looking for builders.</h2>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {OPEN_ROLES.map((role) => (
-              <div key={role.title} className="card" style={{ padding: "28px 28px" }}>
+              <div key={role.title} style={{ ...glassPanel, padding: "28px 28px", borderRadius: 18 }}>
                 <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 12 }}>
                   <div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5 }}>
-                      <span style={{
-                        padding: "2px 10px", borderRadius: 100,
-                        fontSize: "0.6875rem", fontWeight: 700,
-                        background: (TEAM_COLOR[role.team] || "#1A6BFF") + "15",
-                        color: TEAM_COLOR[role.team] || "#1A6BFF",
-                      }}>{role.team}</span>
+                      <span style={{ ...glassChip(TEAM_COLOR[role.team] || "#38BDF8", 0.16), padding: "2px 10px", borderRadius: 100, fontSize: "0.6875rem", fontWeight: 700, color: TEAM_COLOR[role.team] || "#38BDF8" }}>{role.team}</span>
                     </div>
-                    <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.125rem", color: "var(--text-primary)" }}>{role.title}</h3>
-                    <div style={{ fontSize: "0.8125rem", color: "var(--text-muted)", marginTop: 3 }}>{role.type}</div>
+                    <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.125rem", color: textPrimary }}>{role.title}</h3>
+                    <div style={{ fontSize: "0.8125rem", color: textMuted, marginTop: 3 }}>{role.type}</div>
                   </div>
                   <a
                     href={`mailto:nextlife@studioilios.org?subject=Application: ${role.title}`}
                     style={{
                       display: "inline-flex", alignItems: "center", gap: 7,
                       padding: "10px 22px",
-                      background: "var(--accent)", color: "white",
-                      borderRadius: 100, textDecoration: "none",
+                      background: "linear-gradient(135deg, rgba(56,189,248,0.55), rgba(52,211,153,0.55))",
+                      backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
+                      border: "1px solid rgba(255,255,255,0.18)",
+                      color: "#F5F9FF", borderRadius: 100, textDecoration: "none",
                       fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.875rem",
-                      transition: "background 0.15s ease",
                       flexShrink: 0,
                     }}
                   >
                     Apply now
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                   </a>
                 </div>
-                <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: 14 }}>{role.desc}</p>
+                <p style={{ fontSize: "0.9rem", color: textSecondary, lineHeight: 1.6, marginBottom: 14 }}>{role.desc}</p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
-                  {role.skills.map(skill => (
-                    <span key={skill} style={{ padding: "3px 10px", background: "var(--bg-subtle)", border: "1px solid var(--border)", borderRadius: 100, fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{skill}</span>
+                  {role.skills.map((skill) => (
+                    <span key={skill} style={{ padding: "3px 10px", background: "rgba(255,255,255,0.05)", border: `1px solid ${borderColor}`, borderRadius: 100, fontSize: "0.75rem", fontWeight: 600, color: textMuted, fontFamily: "var(--font-mono)" }}>{skill}</span>
                   ))}
                 </div>
               </div>
@@ -134,27 +124,20 @@ export default function CareersPage() {
           </div>
 
           {/* General application */}
-          <div style={{ marginTop: 32, padding: "28px 32px", background: "var(--bg-subtle)", border: "1px solid var(--border)", borderRadius: 18, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
+          <div style={{ ...glassPanel, marginTop: 32, padding: "28px 32px", borderRadius: 18, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
             <div>
-              <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.0625rem", color: "var(--text-primary)", marginBottom: 5 }}>Don&apos;t see your role?</h3>
-              <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)" }}>Send us what you build. If it&apos;s impressive, we&apos;ll make room.</p>
+              <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.0625rem", color: textPrimary, marginBottom: 5 }}>Don&apos;t see your role?</h3>
+              <p style={{ fontSize: "0.875rem", color: textSecondary }}>Send us what you build. If it&apos;s impressive, we&apos;ll make room.</p>
             </div>
             <a
               href="mailto:nextlife@studioilios.org?subject=General Application — OceanAI"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 7,
-                padding: "12px 24px",
-                background: "var(--text-primary)", color: "white",
-                borderRadius: 100, textDecoration: "none",
-                fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.875rem",
-                flexShrink: 0,
-              }}
+              style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "12px 24px", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.16)", color: textPrimary, borderRadius: 100, textDecoration: "none", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.875rem", flexShrink: 0 }}
             >
               Send a general application →
             </a>
           </div>
         </div>
       </section>
-    </>
+    </CompanyShell>
   );
 }

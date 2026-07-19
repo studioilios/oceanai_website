@@ -9,7 +9,7 @@ import { navItems } from "@/lib/content";
 // secondary pages (changelog, press, privacy, terms, bug-report) live in the
 // footer, not here.
 const SITE_LINKS = [
-  { href: "/features", label: "Product" },
+  { href: "/features", label: "Features" },
   { href: "/playground", label: "Playground" },
   { href: "/subscription", label: "Pricing" },
   { href: "/about", label: "About" },

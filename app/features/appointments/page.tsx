@@ -1,55 +1,79 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import FeatureShell from "@/components/features/FeatureShell";
+import { Hero, SectionShell, StatStrip, Panel, FaqList, RelatedFeatures, ClosingCta } from "@/components/features/ui";
+import { textPrimary, textSecondary } from "@/components/features/glass";
 
 export const metadata: Metadata = {
   title: "Doctor Appointments — OceanAI",
   description: "Book and manage doctor-patient appointments directly inside OceanAI. Your full medical schedule in one place.",
 };
 
+const COLOR = "#2DD4BF";
+
+const CAPS = [
+  { icon: "🔍", title: "Find by specialty", desc: "Search across GP, cardiology, neurology, endocrinology, and more. Filter by availability, rating, and experience." },
+  { icon: "📅", title: "Book in 3 taps", desc: "Select a doctor, pick a day, choose a time. Confirmation is instant. No phone calls, no wait music." },
+  { icon: "📋", title: "Context-aware AI", desc: "Your health AI reads your appointment history and upcoming visits before answering any health question." },
+  { icon: "🔔", title: "Reminders built in", desc: "OceanAI reminds you before appointments and follows up after — logging any notes or new prescriptions you add." },
+];
+
+const FAQS = [
+  { q: "Can I book for a family member?", a: "Yes, once you've linked accounts via Family Connect — you can book, view, and manage their appointments from your own device." },
+  { q: "What happens if a doctor cancels?", a: "You're notified immediately and shown the next available matching slots, sorted by specialty and rating." },
+  { q: "Does the AI join the appointment?", a: "No — appointments happen with a real doctor. The AI's role is context: making sure you and the doctor both start from the same information." },
+];
+
 export default function AppointmentsPage() {
   return (
-    <>
-      <section style={{ paddingTop: 140, paddingBottom: 80, background: "linear-gradient(160deg, #F7F9FC 0%, #EEF5FD 100%)", borderBottom: "1px solid var(--border)" }}>
-        <div className="container" style={{ maxWidth: 820 }}>
-          <div style={{ display: "inline-flex", padding: "5px 14px", borderRadius: 100, background: "var(--accent-light)", color: "var(--accent)", fontSize: "0.8125rem", fontWeight: 600, marginBottom: 20 }}>Appointments</div>
-          <h1 className="display-xl" style={{ marginBottom: 20 }}>
-            Your medical schedule,<br />
-            <span className="gradient-text">inside your health AI.</span>
-          </h1>
-          <p className="body-lg" style={{ maxWidth: 540, marginBottom: 32 }}>
-            Book, track, and manage doctor-patient appointments without leaving OceanAI. Every appointment is linked to your health timeline — so your AI has full context before you walk in.
-          </p>
-          <Link href="/playground/appointment" className="btn-primary">See the booking demo →</Link>
-        </div>
-      </section>
+    <FeatureShell variant="appointments">
+      <Hero
+        eyebrow="Appointments"
+        color={COLOR}
+        title="Your medical schedule,"
+        gradientWord="inside your health AI."
+        body="Book, track, and manage doctor-patient appointments without leaving OceanAI. Every appointment is linked to your health timeline — so your AI has full context before you walk in."
+        primaryCta={{ label: "See the booking demo →", href: "/playground/appointment" }}
+        secondaryCta={{ label: "All features", href: "/features" }}
+      />
 
-      <section className="section-pad" style={{ background: "var(--bg-primary)" }}>
-        <div className="container" style={{ maxWidth: 800 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-            {[
-              { icon: "🔍", title: "Find by specialty", desc: "Search across GP, cardiology, neurology, endocrinology, and more. Filter by availability, rating, and experience." },
-              { icon: "📅", title: "Book in 3 taps", desc: "Select a doctor, pick a day, choose a time. Confirmation is instant. No phone calls, no wait music." },
-              { icon: "📋", title: "Context-aware AI", desc: "Your health AI reads your appointment history and upcoming visits before answering any health question." },
-              { icon: "🔔", title: "Reminders built in", desc: "OceanAI reminds you before appointments and follows up after — logging any notes or new prescriptions you add." },
-            ].map((f) => (
-              <div key={f.title} className="card" style={{ padding: "24px 22px" }}>
-                <div style={{ fontSize: "1.5rem", marginBottom: 12 }}>{f.icon}</div>
-                <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1rem", color: "var(--text-primary)", marginBottom: 8 }}>{f.title}</h3>
-                <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>{f.desc}</p>
-              </div>
-            ))}
-          </div>
+      <SectionShell eyebrow="What's included" color={COLOR} title="Booking that doesn't feel like admin work">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }} className="feature-2col">
+          {CAPS.map((f) => (
+            <Panel key={f.title}>
+              <div style={{ fontSize: "1.5rem", marginBottom: 10 }}>{f.icon}</div>
+              <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1rem", color: textPrimary, marginBottom: 8 }}>{f.title}</h3>
+              <p style={{ fontSize: "0.875rem", color: textSecondary, lineHeight: 1.6 }}>{f.desc}</p>
+            </Panel>
+          ))}
         </div>
-      </section>
+      </SectionShell>
 
-      <section className="section-pad-sm" style={{ background: "var(--bg-primary)", textAlign: "center" }}>
-        <div className="container">
-          <h2 className="display-md" style={{ marginBottom: 16 }}>Try the booking flow.</h2>
-          <Link href="/playground/appointment" className="btn-primary" style={{ padding: "15px 36px" }}>Open Appointment Demo →</Link>
-        </div>
-      </section>
+      <SectionShell eyebrow="At a glance" color={COLOR} title="Faster than a phone call">
+        <StatStrip
+          color={COLOR}
+          stats={[
+            { value: "3 taps", label: "From specialty search to confirmed booking" },
+            { value: "6", label: "Specialties in the current demo" },
+            { value: "0", label: "Hold-music minutes" },
+            { value: "1", label: "Timeline shared across AI, doctor, and calendar" },
+          ]}
+        />
+      </SectionShell>
 
-      <style>{`@media(max-width:640px){div[style*="grid-template-columns: 1fr 1fr"]{grid-template-columns:1fr!important}}`}</style>
-    </>
+      <SectionShell eyebrow="FAQ" color={COLOR} title="Common questions">
+        <Panel>
+          <FaqList items={FAQS} />
+        </Panel>
+      </SectionShell>
+
+      <RelatedFeatures currentSlug="appointments" />
+
+      <ClosingCta
+        title="Try the booking flow."
+        body="Walk through the full specialty → doctor → schedule flow in the playground."
+        cta={{ label: "Open Appointment Demo →", href: "/playground/appointment" }}
+        color={COLOR}
+      />
+    </FeatureShell>
   );
 }
