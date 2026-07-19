@@ -1,5 +1,6 @@
 "use client";
 
+import { createElement } from "react";
 import { useInView, fadeUpStyle } from "@/hooks/useInView";
 
 interface AnimatedSectionProps {
@@ -7,7 +8,7 @@ interface AnimatedSectionProps {
   delay?: number;
   className?: string;
   style?: React.CSSProperties;
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType;
 }
 
 export default function AnimatedSection({
@@ -19,14 +20,13 @@ export default function AnimatedSection({
 }: AnimatedSectionProps) {
   const { ref, inView } = useInView({ threshold: 0.1, once: true });
 
-  return (
-    // @ts-expect-error — dynamic tag
-    <Tag
-      ref={ref}
-      className={className}
-      style={{ ...fadeUpStyle(inView, delay), ...style }}
-    >
-      {children}
-    </Tag>
+  return createElement(
+    Tag,
+    {
+      ref: ref as React.Ref<HTMLElement>,
+      className,
+      style: { ...fadeUpStyle(inView, delay), ...style },
+    },
+    children
   );
 }
