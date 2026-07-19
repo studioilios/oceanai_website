@@ -1,34 +1,72 @@
-import { BloodCrisis } from "@/components/Homepage/BloodCrisis";
-import { Credibility } from "@/components/Homepage/Credibility";
-import { CTA } from "@/components/Homepage/CTA";
-import { Features } from "@/components/Homepage/Features";
-import { Footer } from "@/components/Homepage/Footer";
-import { HealthcareAccessGap } from "@/components/Homepage/HealthcareAccessGap";
-import { HealthcareChallenge } from "@/components/Homepage/HealthcareChallenge";
-import { HealthCrisisBridge } from "@/components/Homepage/HealthCrisisBridge";
-import { Hero } from "@/components/Homepage/Hero";
-import { HowItWorks } from "@/components/Homepage/HowItWorks";
-import { Impact } from "@/components/Homepage/Impact";
-import { MissionVision } from "@/components/Homepage/MissionVision";
-import { OceanAIFeatures } from "@/components/Homepage/OceanAIFeatures";
-import Image from "next/image";
+// 
+// import SceneCanvas from "@/components/canvas/SceneCanvas";
+// import Nav from "@/components/ui/Nav";
+// import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
+// import Hero from "@/components/sections/Hero";
+// import CrisisStats from "@/components/sections/CrisisStats";
+// import AccessGap from "@/components/sections/AccessGap";
+// import Features from "@/components/sections/Features";
+// import TechArchitecture from "@/components/sections/TechArchitecture";
+// import Market from "@/components/sections/Market";
+// import BusinessModel from "@/components/sections/BusinessModel";
+// import Team from "@/components/sections/Team";
+// import CTA from "@/components/sections/CTA";
 
-export default function Home() {
+// export default function HomePage() {
+//   return (
+//     <>
+//       <SceneCanvas />
+//       <ScrollProgressBar />
+//       <Nav />
+//       <main id="main-content">
+//         <Hero />
+//         <CrisisStats />
+//         <AccessGap />
+//         <Features />
+//         <TechArchitecture />
+//         <Market />
+//         <BusinessModel />
+//         <Team />
+//         <CTA />
+//       </main>
+//     </>
+//   );
+// }
+
+
+"use client"
+import SceneCanvas from "@/components/canvas/SceneCanvas";
+import Nav from "@/components/ui/Nav";
+import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
+import SectionScrollController from "@/components/ui/SectionScrollController";
+import Hero from "@/components/sections/Hero";
+import CrisisStats from "@/components/sections/CrisisStats";
+import AccessGap from "@/components/sections/AccessGap";
+import Features from "@/components/sections/Features";
+import TechArchitecture from "@/components/sections/TechArchitecture";
+import Market from "@/components/sections/Market";
+import BusinessModel from "@/components/sections/BusinessModel";
+import Team from "@/components/sections/Team";
+import CTA from "@/components/sections/CTA";
+
+export default function HomePage() {
   return (
-     <div className="min-h-screen bg-white">
-      <Hero />
-      <HealthcareAccessGap />
-      <HealthCrisisBridge />
-      <BloodCrisis />
-      <MissionVision />
-      <Features />
-      <OceanAIFeatures />
-      <HealthcareChallenge />
-      <HowItWorks />
-      <Impact />
-      <Credibility />
-      <CTA />
-      <Footer />
-    </div>
+    <>
+      <SceneCanvas />
+      <ScrollProgressBar />
+      <SectionScrollController />
+      <Nav />
+      <main id="main-content">
+        <Hero />
+        <CrisisStats />
+        <AccessGap />
+        <Features />
+        <TechArchitecture />
+        <Market />
+        <BusinessModel />
+        <Team />
+        <CTA />
+      </main>
+    </>
   );
 }
