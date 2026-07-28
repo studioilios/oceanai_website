@@ -38,7 +38,7 @@ Our maximum aggregate liability to you for any claims arising from these terms o
   { title: "10. Contact", body: `For questions about these Terms, contact us at:
 
 Studio ILLIOS
-nextlife@studioilios.org` },
+design@studioilios.com` },
 ];
 
 export default function TermsPage() {

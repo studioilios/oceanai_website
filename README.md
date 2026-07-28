@@ -50,11 +50,11 @@ ANTHROPIC_API_KEY=sk-ant-xxxx
 | `/playground/appointment` | Demo | Doctor booking wizard |
 | `/subscription` | Utility | Pricing — Free / Pro / Family |
 | `/who-we-are` | Utility | Studio ILLIOS story + values |
-| `/careers` | Utility | Open roles → nextlife@studioilios.org |
+| `/careers` | Utility | Open roles → design@studioilios.com |
 | `/changelog` | Utility | Version history — built in public |
 | `/press` | Utility | Media kit, brand colors, key messages |
-| `/contact-us` | Utility | Contact form → nextlife@studioilios.org |
-| `/bug-report` | Utility | Bug report form → nextlife@studioilios.org |
+| `/contact-us` | Utility | Contact form → design@studioilios.com |
+| `/bug-report` | Utility | Bug report form → design@studioilios.com |
 | `/privacy-policy` | Legal | DPDPA compliant privacy policy |
 | `/terms-conditions` | Legal | Terms with medical disclaimer |
 | `/404` | System | Branded not-found page |
@@ -185,5 +185,5 @@ Tokens in `app/globals.css`:
 ## Contact
 
 **Studio ILLIOS** · Built in India 🇮🇳  
-nextlife@studioilios.org  
+design@studioilios.com  
 [GitHub](https://github.com/studioilios) · [HuggingFace](https://huggingface.co/AmareshHebbar)

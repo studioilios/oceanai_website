@@ -97,7 +97,7 @@ export default function CareersPage() {
                     <div style={{ fontSize: "0.8125rem", color: textMuted, marginTop: 3 }}>{role.type}</div>
                   </div>
                   <a
-                    href={`mailto:nextlife@studioilios.org?subject=Application: ${role.title}`}
+                    href={`mailto:design@studioilios.com?subject=Application: ${role.title}`}
                     style={{
                       display: "inline-flex", alignItems: "center", gap: 7,
                       padding: "10px 22px",
@@ -130,7 +130,7 @@ export default function CareersPage() {
               <p style={{ fontSize: "0.875rem", color: textSecondary }}>Send us what you build. If it&apos;s impressive, we&apos;ll make room.</p>
             </div>
             <a
-              href="mailto:nextlife@studioilios.org?subject=General Application — OceanAI"
+              href="mailto:design@studioilios.com?subject=General Application — OceanAI"
               style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "12px 24px", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.16)", color: textPrimary, borderRadius: 100, textDecoration: "none", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.875rem", flexShrink: 0 }}
             >
               Send a general application →

@@ -37,7 +37,7 @@ Documents you upload are stored encrypted and tied exclusively to your account. 
 - Withdraw consent for any data processing
 - Data portability — export your health timeline as a PDF
 
-To exercise any of these rights, email nextlife@studioilios.org.` },
+To exercise any of these rights, email design@studioilios.com.` },
   { title: "Third-party services", body: `OceanAI uses the following third-party services:
 - Anthropic Claude API — for cloud AI features only (no data retention per Anthropic's API terms)
 - Supabase — database and authentication
@@ -48,7 +48,7 @@ We do not sell, rent, or share your data with any advertising or analytics third
   { title: "Contact", body: `For any privacy-related questions, data access requests, or concerns, contact us at:
 
 Studio ILLIOS
-nextlife@studioilios.org
+design@studioilios.com
 
 We will respond within 5 business days.` },
 ];

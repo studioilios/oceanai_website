@@ -95,7 +95,7 @@ export default function SubscriptionPage() {
           <div style={{ maxWidth: 600, margin: "48px auto 0", textAlign: "center" }}>
             <p style={{ fontSize: "0.875rem", color: textMuted, lineHeight: 1.6 }}>
               All prices in INR. Free trial available on Pro plan. Cancel anytime. Questions? Email us at{" "}
-              <a href="mailto:nextlife@studioilios.org" style={{ color: "#7DD3FC", textDecoration: "none" }}>nextlife@studioilios.org</a>
+              <a href="mailto:design@studioilios.com" style={{ color: "#7DD3FC", textDecoration: "none" }}>design@studioilios.com</a>
             </p>
           </div>
         </div>

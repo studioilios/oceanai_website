@@ -50,7 +50,7 @@ export default function PressPage() {
           <p style={{ fontSize: "1.0625rem", color: textSecondary, maxWidth: 520, lineHeight: 1.7, marginBottom: 32 }}>
             Everything you need to write about OceanAI and Studio ILLIOS — facts, key messages, brand colors, and how to reach us.
           </p>
-          <a href="mailto:nextlife@studioilios.org?subject=Press Inquiry — OceanAI" style={{ display: "inline-flex", padding: "13px 26px", borderRadius: 100, background: "linear-gradient(135deg, rgba(251,191,36,0.55), rgba(56,189,248,0.4))", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.18)", color: "#F5F9FF", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.9375rem", textDecoration: "none" }}>
+          <a href="mailto:design@studioilios.com?subject=Press Inquiry — OceanAI" style={{ display: "inline-flex", padding: "13px 26px", borderRadius: 100, background: "linear-gradient(135deg, rgba(251,191,36,0.55), rgba(56,189,248,0.4))", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.18)", color: "#F5F9FF", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.9375rem", textDecoration: "none" }}>
             Press contact →
           </a>
         </div>
@@ -130,8 +130,8 @@ export default function PressPage() {
               <p style={{ fontSize: "0.9375rem", color: textSecondary, maxWidth: 400 }}>For interviews, quotes, product demos, or any media inquiry — email us directly. We respond same day.</p>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <a href="mailto:nextlife@studioilios.org?subject=Press Inquiry" style={{ padding: "13px 26px", borderRadius: 100, background: "linear-gradient(135deg, rgba(251,191,36,0.55), rgba(56,189,248,0.4))", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.18)", color: "#F5F9FF", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.9375rem", textDecoration: "none", textAlign: "center" }}>
-                nextlife@studioilios.org
+              <a href="mailto:design@studioilios.com?subject=Press Inquiry" style={{ padding: "13px 26px", borderRadius: 100, background: "linear-gradient(135deg, rgba(251,191,36,0.55), rgba(56,189,248,0.4))", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.18)", color: "#F5F9FF", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.9375rem", textDecoration: "none", textAlign: "center" }}>
+                design@studioilios.com
               </a>
               <Link href="/who-we-are" style={{ textAlign: "center", fontSize: "0.875rem", color: textMuted, textDecoration: "none" }}>About Studio ILLIOS →</Link>
             </div>
