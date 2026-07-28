@@ -15,10 +15,10 @@ const INQUIRY_TYPES = [
 ];
 
 const INFO_ITEMS = [
-  { icon: "💼", label: "Investor inquiries", desc: "We're raising. If you're building the future of health AI, we'd like to meet.", email: "nextlife@studioilios.org" },
-  { icon: "📰", label: "Press & media", desc: "For interviews, quotes, or coverage of OceanAI and Studio ILLIOS.", email: "nextlife@studioilios.org" },
-  { icon: "🤝", label: "Partnerships", desc: "Healthcare providers, insurance companies, or tech integrations.", email: "nextlife@studioilios.org" },
-  { icon: "💡", label: "Careers", desc: "See open roles or send a general application.", email: "nextlife@studioilios.org" },
+  { icon: "💼", label: "Investor inquiries", desc: "We're raising. If you're building the future of health AI, we'd like to meet.", email: "design@studioilios.com" },
+  { icon: "📰", label: "Press & media", desc: "For interviews, quotes, or coverage of OceanAI and Studio ILLIOS.", email: "design@studioilios.com" },
+  { icon: "🤝", label: "Partnerships", desc: "Healthcare providers, insurance companies, or tech integrations.", email: "design@studioilios.com" },
+  { icon: "💡", label: "Careers", desc: "See open roles or send a general application.", email: "design@studioilios.com" },
 ];
 
 const inputStyle = {
@@ -40,7 +40,7 @@ export default function ContactUsPage() {
   const selectedLabel = INQUIRY_TYPES.find((t) => t.value === type)?.label ?? "";
   const subject = `[${selectedLabel.replace(/^.* /, "")}] ${name || "Contact form"}`;
   const body = `Name: ${name}\nEmail: ${email}\nType: ${selectedLabel}\n\n${message}`;
-  const mailtoHref = `mailto:nextlife@studioilios.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const mailtoHref = `mailto:design@studioilios.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   return (
     <CompanyShell scene={<ContactScene />}>

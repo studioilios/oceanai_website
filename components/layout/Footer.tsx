@@ -238,12 +238,12 @@ export default function Footer() {
                   {link.label}
                 </Link>
               ))}
-              <a href="mailto:nextlife@studioilios.org"
+              <a href="mailto:design@studioilios.com"
                 style={{ fontFamily: "var(--font-body)", fontSize: "0.9rem", color: "rgba(255,255,255,0.55)", textDecoration: "none" }}
                 onMouseEnter={(e) => (e.target as HTMLElement).style.color = "white"}
                 onMouseLeave={(e) => (e.target as HTMLElement).style.color = "rgba(255,255,255,0.55)"}
               >
-                nextlife@studioilios.org
+                design@studioilios.com
               </a>
             </div>
           </div>

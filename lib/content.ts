@@ -114,7 +114,7 @@ export const team = [
 ];
 
 export const demoAccess = {
-  email: "reshama0302@gmail.com",
+  email: "test.oceanai@gmail.com",
   password: "test1234",
   website: "https://oceanai.health",
   ios: "https://apps.apple.com/in/app/ocean-ai-health/id6765589909",

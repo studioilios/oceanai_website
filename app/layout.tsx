@@ -73,7 +73,7 @@
 //       ],
 //       contactPoint: {
 //         "@type": "ContactPoint",
-//         email: "nextlife@studioilios.org",
+//         email: "design@studioilios.com",
 //         contactType: "customer support",
 //       },
 //     },

@@ -81,7 +81,7 @@ export default function Error({
 
           <div style={{ marginTop: 28 }}>
             <a
-              href="mailto:nextlife@studioilios.org?subject=OceanAI Error Report"
+              href="mailto:design@studioilios.com?subject=OceanAI Error Report"
               style={{
                 fontSize: "0.875rem", color: textMuted,
                 textDecoration: "none",

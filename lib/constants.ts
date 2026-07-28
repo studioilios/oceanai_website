@@ -17,11 +17,11 @@ export const BRAND = {
 
 // ── Contact ───────────────────────────────────────────────────────
 export const CONTACT = {
-  primary: "nextlife@studioilios.org",
-  investor: "nextlife@studioilios.org",
-  press: "nextlife@studioilios.org",
-  support: "nextlife@studioilios.org",
-  bugReport: "nextlife@studioilios.org",
+  primary: "design@studioilios.com",
+  investor: "design@studioilios.com",
+  press: "design@studioilios.com",
+  support: "design@studioilios.com",
+  bugReport: "design@studioilios.com",
 } as const;
 
 // ── URLs ─────────────────────────────────────────────────────────

@@ -54,7 +54,7 @@ ${expected}
 Actual behavior:
 ${actual}`;
 
-  const mailtoHref = `mailto:nextlife@studioilios.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const mailtoHref = `mailto:design@studioilios.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   return (
     <CompanyShell scene={<BugReportScene />}>
@@ -149,7 +149,7 @@ ${actual}`;
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
               Send Bug Report
             </a>
-            <p style={{ textAlign: "center", fontSize: "0.75rem", color: textMuted, marginTop: 10 }}>Sends to nextlife@studioilios.org via your email client.</p>
+            <p style={{ textAlign: "center", fontSize: "0.75rem", color: textMuted, marginTop: 10 }}>Sends to design@studioilios.com via your email client.</p>
           </div>
         </div>
       </section>
