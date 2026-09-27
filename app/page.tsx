@@ -1,72 +1,33 @@
-// 
-// import SceneCanvas from "@/components/canvas/SceneCanvas";
-// import Nav from "@/components/ui/Nav";
-// import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
-// import Hero from "@/components/sections/Hero";
-// import CrisisStats from "@/components/sections/CrisisStats";
-// import AccessGap from "@/components/sections/AccessGap";
-// import Features from "@/components/sections/Features";
-// import TechArchitecture from "@/components/sections/TechArchitecture";
-// import Market from "@/components/sections/Market";
-// import BusinessModel from "@/components/sections/BusinessModel";
-// import Team from "@/components/sections/Team";
-// import CTA from "@/components/sections/CTA";
-
-// export default function HomePage() {
-//   return (
-//     <>
-//       <SceneCanvas />
-//       <ScrollProgressBar />
-//       <Nav />
-//       <main id="main-content">
-//         <Hero />
-//         <CrisisStats />
-//         <AccessGap />
-//         <Features />
-//         <TechArchitecture />
-//         <Market />
-//         <BusinessModel />
-//         <Team />
-//         <CTA />
-//       </main>
-//     </>
-//   );
-// }
-
-
-"use client"
-import SceneCanvas from "@/components/canvas/SceneCanvas";
-import Nav from "@/components/ui/Nav";
-import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
-import SectionScrollController from "@/components/ui/SectionScrollController";
-import Hero from "@/components/sections/Hero";
-import CrisisStats from "@/components/sections/CrisisStats";
-import AccessGap from "@/components/sections/AccessGap";
-import Features from "@/components/sections/Features";
-import TechArchitecture from "@/components/sections/TechArchitecture";
-import Market from "@/components/sections/Market";
-import BusinessModel from "@/components/sections/BusinessModel";
-import Team from "@/components/sections/Team";
-import CTA from "@/components/sections/CTA";
+import Loader from "@/components/site/Loader";
+import SiteNav from "@/components/site/SiteNav";
+import SiteHero from "@/components/site/SiteHero";
+import StatsSection from "@/components/site/StatsSection";
+import AccessSection from "@/components/site/AccessSection";
+import FeatureSection from "@/components/site/FeatureSection";
+import TechSection from "@/components/site/TechSection";
+import MarketSection from "@/components/site/MarketSection";
+import BusinessSection from "@/components/site/BusinessSection";
+import TeamSection from "@/components/site/TeamSection";
+import CTASection from "@/components/site/CTASection";
+import SiteFooter from "@/components/site/SiteFooter";
 
 export default function HomePage() {
   return (
-    <>
-      <SceneCanvas />
-      <ScrollProgressBar />
-      <SectionScrollController />
-      <Nav />
+    <div className="oc-home">
+      <Loader />
+      <SiteNav />
       <main id="main-content">
-        <Hero />
-        <CrisisStats />
-        <AccessGap />
-        <Features />
-        <TechArchitecture />
-        <Market />
-        <BusinessModel />
-        <Team />
-        <CTA />
+        <SiteHero />
+        <StatsSection />
+        <AccessSection />
+        <FeatureSection />
+        <TechSection />
+        <MarketSection />
+        <BusinessSection />
+        <TeamSection />
+        <CTASection />
       </main>
-    </>
+      <SiteFooter />
+    </div>
   );
 }

@@ -9,6 +9,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        ink: "#002321",
+        "ink-2": "#003432",
+        aqua: "#00C7BE",
+        "aqua-deep": "#00A89F",
+        "aqua-soft": "#E8FFFC",
         accent: "#1A6BFF",
         "accent-hover": "#1458D6",
         "accent-light": "#EBF1FF",
