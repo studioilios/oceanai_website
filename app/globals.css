@@ -664,3 +664,141 @@ select:focus-visible {
 :focus:not(:focus-visible) {
   outline: none;
 }
+/* ═══════════════════════════════════════════════════════════════
+   SITE REDESIGN — light / deep-teal / turquoise system (home page)
+   Everything is scoped under .oc-home so feature / playground /
+   company pages keep their existing look.
+   ═══════════════════════════════════════════════════════════════ */
+
+html:has(.oc-home),
+html:has(.oc-home) body {
+  background: #ffffff;
+  color: #0b1f1e;
+}
+
+.oc-home {
+  --oc-ink: #002321;
+  --oc-ink-2: #003432;
+  --oc-aqua: #00c7be;
+  --oc-aqua-deep: #00a89f;
+  --oc-soft: #e8fffc;
+  --oc-text: #0b1f1e;
+  --oc-muted: #5b6f6e;
+  font-family: var(--font-site), system-ui, sans-serif;
+  color: var(--oc-text);
+  background: #fff;
+  overflow-x: clip;
+}
+.oc-home h1, .oc-home h2, .oc-home h3, .oc-home h4,
+.oc-home p, .oc-home .section-shell h1 { text-shadow: none; }
+.oc-home h1, .oc-home h2, .oc-home h3, .oc-home h4 {
+  font-family: var(--font-site), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  color: inherit;
+}
+.oc-home .reveal { transform: translateY(20px); transition-duration: 0.7s; }
+.oc-home .reveal.is-visible { transform: none; }
+
+.oc-h1 { font-size: clamp(2.25rem, 5.6vw, 4rem); line-height: 1.04; font-weight: 800; letter-spacing: -0.035em; }
+.oc-h2 { font-size: clamp(1.75rem, 4vw, 3rem); line-height: 1.1; font-weight: 800; letter-spacing: -0.03em; }
+.oc-accent { color: var(--oc-aqua-deep); }
+.oc-dark .oc-accent { color: var(--oc-aqua); }
+.oc-muted { color: var(--oc-muted); }
+.oc-dark .oc-muted { color: rgba(232, 255, 252, 0.68); }
+
+.oc-container { width: 100%; max-width: 76rem; margin: 0 auto; padding-inline: 1.25rem; }
+@media (min-width: 768px) { .oc-container { padding-inline: 2.5rem; } }
+.oc-section { position: relative; padding-block: 4.5rem; overflow: hidden; }
+@media (min-width: 1024px) { .oc-section { padding-block: 7rem; } }
+
+.oc-dark { background: var(--oc-ink); color: #fff; }
+.oc-tint { background: linear-gradient(180deg, #f3fffe 0%, #e8fffc 100%); }
+
+/* Cards */
+.oc-card {
+  background: #fff;
+  border: 1px solid rgba(0, 35, 33, 0.06);
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px -12px rgba(0, 35, 33, 0.12);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s;
+}
+.oc-card:hover { transform: translateY(-4px); box-shadow: 0 22px 44px -16px rgba(0, 35, 33, 0.2); }
+.oc-card-soft { background: var(--oc-soft); border-color: rgba(0, 199, 190, 0.18); box-shadow: none; }
+.oc-card-dark {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+}
+
+/* Buttons */
+.oc-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  border-radius: 999px; padding: 0.8rem 1.5rem;
+  font-size: 0.9rem; font-weight: 600; line-height: 1.2;
+  transition: transform 0.25s, box-shadow 0.25s, background 0.25s, color 0.25s;
+  white-space: nowrap;
+}
+.oc-btn:hover { transform: translateY(-2px); }
+.oc-btn-primary { background: var(--oc-aqua); color: var(--oc-ink); box-shadow: 0 8px 20px -8px rgba(0, 199, 190, 0.7); }
+.oc-btn-primary:hover { background: #17dcd2; box-shadow: 0 12px 26px -8px rgba(0, 199, 190, 0.8); }
+.oc-btn-secondary { background: #fff; color: var(--oc-text); border: 1px solid rgba(0, 35, 33, 0.14); }
+.oc-btn-secondary:hover { border-color: var(--oc-aqua); box-shadow: 0 8px 20px -10px rgba(0, 35, 33, 0.25); }
+.oc-btn-dark { background: var(--oc-ink); color: #fff; }
+.oc-btn-ghost-light { border: 1px solid rgba(255, 255, 255, 0.25); color: #fff; }
+.oc-btn-ghost-light:hover { border-color: var(--oc-aqua); }
+@media (max-width: 480px) { .oc-btn-block { width: 100%; } }
+
+.oc-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.4rem 0.9rem; border-radius: 999px;
+  background: var(--oc-soft); color: var(--oc-aqua-deep);
+  border: 1px solid rgba(0, 199, 190, 0.25);
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.02em;
+}
+.oc-dark .oc-badge { background: rgba(0, 199, 190, 0.12); color: var(--oc-aqua); border-color: rgba(0, 199, 190, 0.3); }
+.oc-icon-dot {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 2.5rem; height: 2.5rem; border-radius: 999px;
+  background: var(--oc-aqua); color: var(--oc-ink);
+}
+
+/* Decorative backgrounds */
+.oc-dots {
+  background-image: radial-gradient(rgba(0, 199, 190, 0.45) 1.5px, transparent 1.6px);
+  background-size: 18px 18px;
+  -webkit-mask-image: radial-gradient(circle at center, #000 30%, transparent 72%);
+  mask-image: radial-gradient(circle at center, #000 30%, transparent 72%);
+}
+.oc-blob { position: absolute; border-radius: 999px; filter: blur(70px); pointer-events: none; }
+.oc-ring {
+  position: absolute; border-radius: 999px; pointer-events: none;
+  border: 1px solid rgba(0, 199, 190, 0.28);
+}
+
+@keyframes oc-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes oc-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes oc-pop { from { opacity: 0; transform: translateY(16px) scale(0.94); } to { opacity: 1; transform: none; } }
+.oc-rise { animation: oc-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.oc-pop { animation: oc-pop 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.oc-float { animation: oc-float 6s ease-in-out infinite; }
+
+.oc-scroll-x { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 0.5rem; -webkit-overflow-scrolling: touch; }
+.oc-scroll-x > * { scroll-snap-align: start; flex: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-float, .oc-rise, .oc-pop { animation: none !important; }
+  .oc-home .reveal { opacity: 1; transform: none; }
+}
+
+/* Intro loader */
+@keyframes oc-ring-out { 0% { transform: scale(0.9); opacity: 0.8; } 100% { transform: scale(2); opacity: 0; } }
+@keyframes oc-draw { from { stroke-dashoffset: 320; } to { stroke-dashoffset: 0; } }
+@keyframes oc-fill { from { width: 0; } to { width: 100%; } }
+.oc-loader-ring { animation: oc-ring-out 1.8s ease-out infinite; }
+.oc-loader-ecg { stroke-dasharray: 320; animation: oc-draw 1.4s ease-in-out both; }
+.oc-loader-bar { animation: oc-fill 1.8s cubic-bezier(0.4, 0, 0.2, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .oc-loader-ring, .oc-loader-ecg, .oc-loader-bar { animation: none !important; }
+  .oc-loader-ecg { stroke-dashoffset: 0; }
+  .oc-loader-bar { width: 100%; }
+}

@@ -148,7 +148,7 @@
 
 
 import type { Metadata } from "next";
-import { Fraunces, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Fraunces, Inter, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const display = Fraunces({
@@ -173,6 +173,13 @@ const mono = IBM_Plex_Mono({
   display: "swap",
 });
 
+const site = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-site",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Ocean AI — Your Health. Your Language. Your AI.",
   description:
@@ -181,7 +188,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable} ${site.variable}`}>
       <body className="font-body antialiased">{children}</body>
     </html>
   );
