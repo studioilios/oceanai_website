@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import CompanyShell from "@/components/company/CompanyShell";
-import ContactScene from "@/components/canvas/scenes/ContactScene";
-import { glassPanel, glassPanelSoft, glassChip, textPrimary, textSecondary, textMuted, borderColor } from "@/components/features/glass";
+import SiteNav from "@/components/site/SiteNav";
+import SiteFooter from "@/components/site/SiteFooter";
+import { Badge, DecorativeBackground, Icon } from "@/components/site/primitives";
 
 const INQUIRY_TYPES = [
   { value: "investor", label: "💼 Investor inquiry" },
@@ -15,21 +15,31 @@ const INQUIRY_TYPES = [
 ];
 
 const INFO_ITEMS = [
-  { icon: "💼", label: "Investor inquiries", desc: "We're raising. If you're building the future of health AI, we'd like to meet.", email: "design@studioilios.com" },
-  { icon: "📰", label: "Press & media", desc: "For interviews, quotes, or coverage of OceanAI and Studio ILLIOS.", email: "design@studioilios.com" },
-  { icon: "🤝", label: "Partnerships", desc: "Healthcare providers, insurance companies, or tech integrations.", email: "design@studioilios.com" },
-  { icon: "💡", label: "Careers", desc: "See open roles or send a general application.", email: "design@studioilios.com" },
+  {
+    icon: "💼",
+    label: "Investor inquiries",
+    desc: "We're raising. If you're building the future of health AI, we'd like to meet.",
+    email: "design@studioilios.com",
+  },
+  {
+    icon: "📰",
+    label: "Press & media",
+    desc: "For interviews, quotes, or coverage of OceanAI and Studio ILLIOS.",
+    email: "design@studioilios.com",
+  },
+  {
+    icon: "🤝",
+    label: "Partnerships",
+    desc: "Healthcare providers, insurance companies, or tech integrations.",
+    email: "design@studioilios.com",
+  },
+  {
+    icon: "💡",
+    label: "Careers",
+    desc: "See open roles or send a general application.",
+    email: "design@studioilios.com",
+  },
 ];
-
-const inputStyle = {
-  width: "100%", padding: "11px 14px",
-  border: `1.5px solid ${borderColor}`, borderRadius: 10,
-  fontFamily: "var(--font-body)", fontSize: "0.9375rem",
-  color: textPrimary, background: "rgba(255,255,255,0.05)",
-  outline: "none", transition: "border-color 0.15s ease",
-};
-
-const labelStyle = { display: "block" as const, fontSize: "0.8125rem", fontWeight: 600, color: textSecondary, marginBottom: 6 };
 
 export default function ContactUsPage() {
   const [type, setType] = useState("investor");
@@ -43,86 +53,159 @@ export default function ContactUsPage() {
   const mailtoHref = `mailto:design@studioilios.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   return (
-    <CompanyShell scene={<ContactScene />}>
-      <section className="relative z-10" style={{ paddingTop: 140, paddingBottom: 72, borderBottom: `1px solid ${borderColor}` }}>
-        <div className="container" style={{ maxWidth: 720 }}>
-          <div style={{ display: "inline-flex", ...glassChip("#38BDF8"), padding: "5px 14px", borderRadius: 100, color: "#7DD3FC", fontSize: "0.8125rem", fontWeight: 600, marginBottom: 20 }}>Get in touch</div>
-          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(2rem, 4.5vw, 3.25rem)", color: textPrimary, marginBottom: 16, textShadow: "0 2px 24px rgba(5,11,20,0.85)" }}>We read every email.</h1>
-          <p style={{ fontSize: "1.0625rem", color: textSecondary, maxWidth: 480 }}>Investors, press, partners, or just someone building in health AI — we&apos;d love to hear from you.</p>
-        </div>
-      </section>
+    <div className="oc-home min-h-screen flex flex-col bg-white">
+      <SiteNav />
 
-      <section className="relative z-10" style={{ padding: "72px 0" }}>
-        <div className="container" style={{ maxWidth: 1000 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: 56, alignItems: "start" }} className="contact-grid">
-            {/* Form */}
-            <div style={{ ...glassPanel, borderRadius: 20, padding: "36px 36px" }}>
-              <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.25rem", color: textPrimary, marginBottom: 28 }}>Send a message</h2>
-
-              <div style={{ marginBottom: 20 }}>
-                <label style={labelStyle}>What&apos;s this about?</label>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                  {INQUIRY_TYPES.map((t) => (
-                    <button
-                      key={t.value}
-                      type="button"
-                      onClick={() => setType(t.value)}
-                      style={{
-                        padding: "7px 14px", borderRadius: 100,
-                        ...(type === t.value ? glassChip("#38BDF8", 0.2) : glassPanelSoft),
-                        color: type === t.value ? "#7DD3FC" : textSecondary,
-                        fontFamily: "var(--font-body)", fontWeight: 500, fontSize: "0.8125rem",
-                        cursor: "pointer", transition: "all 0.15s ease",
-                      }}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
+      <main id="main-content" className="flex-1">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden pb-12 pt-28 md:pb-16 md:pt-40">
+          <DecorativeBackground />
+          <div className="oc-container relative">
+            <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+              <div className="oc-rise">
+                <Badge>Get in touch</Badge>
               </div>
 
-              <div style={{ marginBottom: 16 }}>
-                <label style={labelStyle}>Your name</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Anika Sharma" style={inputStyle} onFocus={(e) => (e.target.style.borderColor = "#38BDF8")} onBlur={(e) => (e.target.style.borderColor = borderColor)} />
-              </div>
+              <h1 className="oc-h1 oc-rise mt-6" style={{ animationDelay: "100ms" }}>
+                We read <span className="oc-accent">every email.</span>
+              </h1>
 
-              <div style={{ marginBottom: 16 }}>
-                <label style={labelStyle}>Your email</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="anika@example.com" style={inputStyle} onFocus={(e) => (e.target.style.borderColor = "#38BDF8")} onBlur={(e) => (e.target.style.borderColor = borderColor)} />
-              </div>
-
-              <div style={{ marginBottom: 24 }}>
-                <label style={labelStyle}>Message</label>
-                <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Tell us what you're thinking..." rows={5} style={{ ...inputStyle, resize: "vertical" }} onFocus={(e) => (e.target.style.borderColor = "#38BDF8")} onBlur={(e) => (e.target.style.borderColor = borderColor)} />
-              </div>
-
-              <a href={mailtoHref} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 20px", borderRadius: 100, background: "linear-gradient(135deg, rgba(56,189,248,0.55), rgba(52,211,153,0.55))", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.18)", color: "#F5F9FF", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "1rem", textDecoration: "none" }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                Send via email
-              </a>
-              <p style={{ textAlign: "center", fontSize: "0.75rem", color: textMuted, marginTop: 10 }}>Opens your email client with everything filled in.</p>
-            </div>
-
-            {/* Info panel */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {INFO_ITEMS.map((item) => (
-                <div key={item.label} style={{ ...glassPanel, padding: "20px 22px", borderRadius: 14 }}>
-                  <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                    <span style={{ fontSize: "1.25rem", flexShrink: 0 }}>{item.icon}</span>
-                    <div>
-                      <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "0.9375rem", color: textPrimary, marginBottom: 4 }}>{item.label}</div>
-                      <p style={{ fontSize: "0.8125rem", color: textSecondary, lineHeight: 1.55, marginBottom: 8 }}>{item.desc}</p>
-                      <a href={`mailto:${item.email}`} style={{ fontSize: "0.8125rem", color: "#7DD3FC", fontWeight: 600, textDecoration: "none" }}>{item.email} →</a>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              <p
+                className="oc-muted oc-rise mt-5 max-w-xl text-base leading-relaxed md:text-lg"
+                style={{ animationDelay: "200ms" }}
+              >
+                Investors, press, partners, or just someone building in health AI — we&apos;d love to hear from you.
+              </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <style>{`@media(max-width:900px){.contact-grid{grid-template-columns:1fr!important}}`}</style>
-    </CompanyShell>
+        {/* Contact Content Section */}
+        <section className="oc-section oc-tint pt-8 pb-24">
+          <div aria-hidden className="pointer-events-none absolute inset-0">
+            <div className="oc-dots absolute -left-10 top-10 h-64 w-64 opacity-50" />
+            <div className="oc-blob -right-24 bottom-10 h-72 w-72 bg-aqua/20" />
+          </div>
+
+          <div className="oc-container relative max-w-5xl">
+            <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-8 items-start">
+              {/* Form Card */}
+              <div className="oc-card p-8 md:p-10 shadow-lg bg-white">
+                <h2 className="text-2xl font-bold text-ink mb-6">Send a message</h2>
+
+                {/* Inquiry Type Chips */}
+                <div className="mb-6">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-ink/60 mb-2.5">
+                    What&apos;s this about?
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {INQUIRY_TYPES.map((t) => {
+                      const isActive = type === t.value;
+                      return (
+                        <button
+                          key={t.value}
+                          type="button"
+                          onClick={() => setType(t.value)}
+                          className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                            isActive
+                              ? "bg-ink text-aqua shadow-sm scale-105"
+                              : "bg-aqua-soft text-ink/80 hover:bg-aqua/20 hover:text-ink"
+                          }`}
+                        >
+                          {t.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Name Field */}
+                <div className="mb-5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-ink/60 mb-2">
+                    Your name
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Anika Sharma"
+                    className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white text-ink text-sm outline-none transition-all focus:border-aqua focus:ring-2 focus:ring-aqua/20"
+                  />
+                </div>
+
+                {/* Email Field */}
+                <div className="mb-5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-ink/60 mb-2">
+                    Your email
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="anika@example.com"
+                    className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white text-ink text-sm outline-none transition-all focus:border-aqua focus:ring-2 focus:ring-aqua/20"
+                  />
+                </div>
+
+                {/* Message Field */}
+                <div className="mb-6">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-ink/60 mb-2">
+                    Message
+                  </label>
+                  <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Tell us what you're thinking..."
+                    rows={5}
+                    className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white text-ink text-sm outline-none transition-all resize-y focus:border-aqua focus:ring-2 focus:ring-aqua/20"
+                  />
+                </div>
+
+                {/* Submit button */}
+                <a
+                  href={mailtoHref}
+                  className="oc-btn oc-btn-primary w-full shadow-md text-base font-bold py-3.5"
+                >
+                  <Icon name="mail" size={18} />
+                  <span>Send via email</span>
+                </a>
+                <p className="text-center text-xs text-ink/50 mt-3">
+                  Opens your email client with everything pre-filled.
+                </p>
+              </div>
+
+              {/* Info Sidebar Cards */}
+              <div className="flex flex-col gap-4">
+                {INFO_ITEMS.map((item) => (
+                  <div
+                    key={item.label}
+                    className="oc-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md bg-white"
+                  >
+                    <div className="flex items-start gap-4">
+                      <span className="grid h-10 w-10 flex-none place-items-center rounded-xl bg-aqua-soft text-xl border border-aqua/20">
+                        {item.icon}
+                      </span>
+                      <div>
+                        <h3 className="font-bold text-ink text-base">{item.label}</h3>
+                        <p className="oc-muted text-xs leading-relaxed mt-1 mb-2">{item.desc}</p>
+                        <a
+                          href={`mailto:${item.email}`}
+                          className="inline-flex items-center gap-1 text-xs font-bold text-aqua-deep hover:underline"
+                        >
+                          <span>{item.email}</span>
+                          <Icon name="arrow" size={12} />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </div>
   );
 }
