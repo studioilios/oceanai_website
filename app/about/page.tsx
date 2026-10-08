@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import CompanyShell from "@/components/company/CompanyShell";
-import AboutScene from "@/components/canvas/scenes/AboutScene";
-import { glassPanel, glassPanelSoft, glassChip, textPrimary, textSecondary, textMuted, borderColor } from "@/components/features/glass";
+import SiteNav from "@/components/site/SiteNav";
+import SiteFooter from "@/components/site/SiteFooter";
+import { Badge, CTAButton, DecorativeBackground, Icon } from "@/components/site/primitives";
 
 export const metadata: Metadata = {
   title: "About — OceanAI by Studio ILLIOS",
-  description: "OceanAI is built by Studio ILLIOS — a product studio from India building AI-native health infrastructure.",
+  description:
+    "OceanAI is built by Studio ILLIOS — a product studio from India building AI-native health infrastructure.",
 };
 
 const BELIEFS = [
@@ -34,94 +35,167 @@ const PROJECTS = [
 
 export default function AboutPage() {
   return (
-    <CompanyShell scene={<AboutScene />}>
-      {/* Hero */}
-      <section className="relative z-10" style={{ paddingTop: 140, paddingBottom: 72, borderBottom: `1px solid ${borderColor}` }}>
-        <div className="container" style={{ maxWidth: 820 }}>
-          <div style={{ display: "inline-flex", ...glassChip("#34D399"), padding: "5px 14px", borderRadius: 100, color: "#6EE7B7", fontSize: "0.8125rem", fontWeight: 600, marginBottom: 24 }}>
-            Studio ILLIOS
-          </div>
-          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(2rem, 4.5vw, 3.25rem)", color: textPrimary, letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 24, textShadow: "0 2px 24px rgba(5,11,20,0.85)" }}>
-            We&apos;re building the
-            <br />
-            <span style={{ background: "linear-gradient(135deg, #38BDF8, #34D399)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-              health OS for humans.
-            </span>
-          </h1>
-          <p style={{ fontSize: "1.0625rem", color: textSecondary, maxWidth: 600, lineHeight: 1.7, marginBottom: 28 }}>
-            OceanAI is the flagship product from Studio ILLIOS — a product studio from India building AI-native infrastructure at the intersection of health, edge computing, and open-source AI.
-          </p>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-            <a href="https://github.com/studioilios" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 6, ...glassPanelSoft, padding: "9px 16px", borderRadius: 100, color: "#7DD3FC", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.8125rem", textDecoration: "none" }}>
-              TrueNorth ↗
-            </a>
-            <a href="https://huggingface.co/AmareshHebbar" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 6, ...glassPanelSoft, padding: "9px 16px", borderRadius: 100, color: "#7DD3FC", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.8125rem", textDecoration: "none" }}>
-              HuggingFace Models ↗
-            </a>
-          </div>
-        </div>
-      </section>
+    <div className="oc-home min-h-screen flex flex-col bg-white">
+      <SiteNav />
 
-      {/* Mission + beliefs */}
-      <section className="relative z-10" style={{ padding: "72px 0" }}>
-        <div className="container" style={{ maxWidth: 820 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 60, marginBottom: 56 }} className="feature-2col">
-            <div>
-              <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.6rem", color: textPrimary, marginBottom: 16, textShadow: "0 2px 20px rgba(5,11,20,0.8)" }}>Why we built this</h2>
-              <p style={{ fontSize: "0.9375rem", color: textSecondary, lineHeight: 1.75, marginBottom: 16 }}>
-                Health data is fragmented, cloud-dependent, and opaque. Patients don&apos;t understand their own lab reports. Insurance coding is a black box. Your health AI shouldn&apos;t need an internet connection to know who you are.
+      <main id="main-content" className="flex-1">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden pb-16 pt-28 md:pb-24 md:pt-40">
+          <DecorativeBackground />
+          <div className="oc-container relative">
+            <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+              <div className="oc-rise">
+                <Badge>Studio ILLIOS</Badge>
+              </div>
+
+              <h1 className="oc-h1 oc-rise mt-6" style={{ animationDelay: "100ms" }}>
+                We&apos;re building the
+                <br />
+                <span className="oc-accent">health OS for humans.</span>
+              </h1>
+
+              <p
+                className="oc-muted oc-rise mt-6 max-w-2xl text-base leading-relaxed md:text-lg"
+                style={{ animationDelay: "200ms" }}
+              >
+                OceanAI is the flagship product from Studio ILLIOS — a product studio from India building AI-native
+                infrastructure at the intersection of health, edge computing, and open-source AI.
               </p>
-              <p style={{ fontSize: "0.9375rem", color: textSecondary, lineHeight: 1.75 }}>
-                OceanAI puts the intelligence at the edge — on your phone, offline, private — and wraps it in the clearest health experience we could build.
-              </p>
-            </div>
-            <div>
-              <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.6rem", color: textPrimary, marginBottom: 16, textShadow: "0 2px 20px rgba(5,11,20,0.8)" }}>What we believe</h2>
-              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {BELIEFS.map((belief) => (
-                  <div key={belief} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                    <div style={{ ...glassChip("#34D399", 0.18), width: 20, height: 20, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-                        <path d="M20 6L9 17l-5-5" stroke="#34D399" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                    <p style={{ fontSize: "0.9375rem", color: textSecondary, lineHeight: 1.55 }}>{belief}</p>
-                  </div>
-                ))}
+
+              <div
+                className="oc-rise mt-8 flex flex-wrap items-center justify-center gap-3"
+                style={{ animationDelay: "300ms" }}
+              >
+                <CTAButton href="https://github.com/studioilios" external>
+                  TrueNorth on GitHub
+                </CTAButton>
+                <CTAButton href="https://huggingface.co/AmareshHebbar" external variant="secondary">
+                  HuggingFace Models
+                </CTAButton>
               </div>
             </div>
           </div>
+        </section>
 
-          {/* Open source work */}
-          <div style={{ ...glassPanel, padding: "36px 40px", borderRadius: 20, marginBottom: 48 }}>
-            <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.125rem", color: textPrimary, marginBottom: 20 }}>Our open-source work</h3>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }} className="feature-related-grid">
+        {/* Mission + Beliefs Section */}
+        <section className="oc-section oc-tint pt-12 pb-20">
+          <div aria-hidden className="pointer-events-none absolute inset-0">
+            <div className="oc-dots absolute -left-10 top-10 h-64 w-64 opacity-50" />
+            <div className="oc-blob -right-24 bottom-10 h-72 w-72 bg-aqua/20" />
+          </div>
+
+          <div className="oc-container relative">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-5xl mx-auto">
+              {/* Why we built this */}
+              <div className="oc-card p-8 md:p-10 flex flex-col justify-between">
+                <div>
+                  <span className="oc-badge">Our Mission</span>
+                  <h2 className="oc-h2 mt-4 text-ink text-2xl md:text-3xl">Why we built this</h2>
+                  <p className="oc-muted mt-4 text-base leading-relaxed">
+                    Health data is fragmented, cloud-dependent, and opaque. Patients don&apos;t understand their own lab
+                    reports. Insurance coding is a black box. Your health AI shouldn&apos;t need an internet connection
+                    to know who you are.
+                  </p>
+                  <p className="oc-muted mt-4 text-base leading-relaxed">
+                    OceanAI puts the intelligence at the edge — on your phone, offline, private — and wraps it in the
+                    clearest health experience we could build.
+                  </p>
+                </div>
+              </div>
+
+              {/* What we believe */}
+              <div className="oc-card p-8 md:p-10 flex flex-col justify-between">
+                <div>
+                  <span className="oc-badge">Core Principles</span>
+                  <h2 className="oc-h2 mt-4 text-ink text-2xl md:text-3xl">What we believe</h2>
+                  <div className="mt-6 flex flex-col gap-4">
+                    {BELIEFS.map((belief) => (
+                      <div key={belief} className="flex items-start gap-3.5">
+                        <span className="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-aqua text-ink">
+                          <Icon name="check" size={14} />
+                        </span>
+                        <p className="text-base font-medium text-ink/90 leading-snug">{belief}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Open Source Work Section */}
+        <section className="oc-section bg-white py-20">
+          <div className="oc-container relative">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <Badge>Ecosystem</Badge>
+              <h2 className="oc-h2 mt-3 text-ink">
+                Our <span className="oc-accent">open-source work</span>
+              </h2>
+              <p className="oc-muted mt-3 text-base">
+                We develop and open-source models, mappers, and autonomous agents for the global medical community.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {PROJECTS.map((project) => (
-                <a key={project.name} href={project.link} target="_blank" rel="noopener noreferrer" style={{ display: "block", ...glassPanelSoft, padding: "16px 18px", borderRadius: 12, textDecoration: "none", transition: "all 0.15s ease" }}>
-                  <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "0.9375rem", color: "#7DD3FC", marginBottom: 5 }}>{project.name} ↗</div>
-                  <div style={{ fontSize: "0.8125rem", color: textMuted, lineHeight: 1.45 }}>{project.desc}</div>
+                <a
+                  key={project.name}
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group oc-card p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg no-underline"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-lg font-bold text-ink transition-colors group-hover:text-aqua-deep">
+                        {project.name}
+                      </h3>
+                      <Icon name="arrowUp" size={16} className="text-aqua-deep transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </div>
+                    <p className="oc-muted text-sm leading-relaxed">{project.desc}</p>
+                  </div>
+                  <div className="mt-4 text-xs font-bold text-aqua-deep uppercase tracking-wider">
+                    View on {project.link.includes("github") ? "GitHub" : "HuggingFace"} →
+                  </div>
                 </a>
               ))}
             </div>
           </div>
+        </section>
 
-          {/* Contact */}
-          <div style={{ textAlign: "center" }}>
-            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.6rem", color: textPrimary, marginBottom: 16, textShadow: "0 2px 20px rgba(5,11,20,0.8)" }}>Get in touch</h2>
-            <p style={{ fontSize: "0.9375rem", color: textMuted, maxWidth: 400, margin: "0 auto 28px" }}>
-              For investor inquiries, partnerships, or anything else — we&apos;d love to hear from you.
-            </p>
-            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <a href="mailto:hello@illios.studio" style={{ display: "inline-flex", padding: "13px 26px", borderRadius: 100, background: "linear-gradient(135deg, rgba(56,189,248,0.55), rgba(52,211,153,0.55))", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.18)", color: "#F5F9FF", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.9375rem", textDecoration: "none" }}>
-                hello@illios.studio
-              </a>
-              <Link href="/playground" style={{ display: "inline-flex", ...glassPanelSoft, padding: "13px 26px", borderRadius: 100, color: textSecondary, fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.9375rem", textDecoration: "none" }}>
-                Try the Playground
-              </Link>
+        {/* Contact & CTA Section */}
+        <section className="oc-section pb-24 pt-8">
+          <div className="oc-container">
+            <div className="relative overflow-hidden rounded-[2rem] bg-ink px-6 py-12 text-center text-white shadow-[0_30px_70px_-20px_rgba(0,35,33,0.45)] md:rounded-[2.5rem] md:px-12 md:py-16">
+              <div className="oc-blob -right-10 -top-10 h-64 w-64 bg-aqua/30" />
+              <div className="oc-dots absolute -bottom-10 -left-10 h-56 w-56 opacity-30" />
+
+              <div className="relative z-10 mx-auto max-w-2xl">
+                <span className="inline-block rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-aqua backdrop-blur">
+                  Get in touch
+                </span>
+                <h2 className="mt-5 text-2xl font-extrabold leading-tight text-white md:text-4xl">
+                  Let&apos;s build the future of <span className="text-aqua">health intelligence.</span>
+                </h2>
+                <p className="mt-4 text-sm leading-relaxed text-white/70 md:text-base">
+                  For investor inquiries, partnerships, or technical discussions — we&apos;d love to connect.
+                </p>
+                <div className="mt-8 flex flex-wrap justify-center gap-3">
+                  <CTAButton href="mailto:design@studioilios.com" external>
+                    hello@illios.studio
+                  </CTAButton>
+                  <CTAButton href="/playground" variant="secondary" arrow={false}>
+                    Try the Playground
+                  </CTAButton>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </CompanyShell>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </div>
   );
 }

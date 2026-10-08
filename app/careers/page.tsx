@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import CompanyShell from "@/components/company/CompanyShell";
-import CareersScene from "@/components/canvas/scenes/CareersScene";
-import { glassPanel, glassChip, textPrimary, textSecondary, textMuted, borderColor } from "@/components/features/glass";
+import SiteNav from "@/components/site/SiteNav";
+import SiteFooter from "@/components/site/SiteFooter";
+import { Badge, CTAButton, DecorativeBackground, Icon } from "@/components/site/primitives";
 
 export const metadata: Metadata = {
   title: "Careers — OceanAI · Studio ILLIOS",
-  description: "Join Studio ILLIOS. We're building AI-native health infrastructure. Small team, high ownership, serious technical problems.",
+  description:
+    "Join Studio ILLIOS. We're building AI-native health infrastructure. Small team, high ownership, serious technical problems.",
 };
 
 const OPEN_ROLES = [
@@ -39,105 +40,137 @@ const OPEN_ROLES = [
   },
 ];
 
-const TEAM_COLOR: Record<string, string> = {
-  Mobile: "#38BDF8",
-  AI: "#A78BFA",
-  Backend: "#34D399",
-  Design: "#FBBF24",
-};
+const PERKS = [
+  { num: "Small team", label: "High ownership, no bureaucracy" },
+  { num: "Remote-first", label: "Work from anywhere in India" },
+  { num: "Real AI", label: "Not wrappers — actual fine-tuned models" },
+];
 
 export default function CareersPage() {
   return (
-    <CompanyShell scene={<CareersScene />}>
-      {/* Hero */}
-      <section className="relative z-10" style={{ paddingTop: 140, paddingBottom: 72, borderBottom: `1px solid ${borderColor}` }}>
-        <div className="container" style={{ maxWidth: 820 }}>
-          <div style={{ display: "inline-flex", ...glassChip("#34D399"), padding: "5px 14px", borderRadius: 100, color: "#6EE7B7", fontSize: "0.8125rem", fontWeight: 600, marginBottom: 20 }}>
-            We&apos;re hiring
-          </div>
-          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(2rem, 4.5vw, 3.25rem)", color: textPrimary, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 20, textShadow: "0 2px 24px rgba(5,11,20,0.85)" }}>
-            Build the future of
-            <br />
-            <span style={{ background: "linear-gradient(135deg, #38BDF8, #34D399)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>personal health AI.</span>
-          </h1>
-          <p style={{ fontSize: "1.0625rem", color: textSecondary, maxWidth: 560, lineHeight: 1.7, marginBottom: 36 }}>
-            Studio ILLIOS is a small, focused team building AI-native health infrastructure. We ship fast, own what we build, and work on problems that actually matter. India-based, globally distributed.
-          </p>
-          <div style={{ display: "flex", gap: 32, flexWrap: "wrap" }}>
-            {[
-              { num: "Small team", label: "High ownership, no bureaucracy" },
-              { num: "Remote-first", label: "Work from anywhere in India" },
-              { num: "Real AI", label: "Not wrappers — actual models" },
-            ].map((s) => (
-              <div key={s.num}>
-                <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.125rem", color: textPrimary, marginBottom: 3 }}>{s.num}</div>
-                <div style={{ fontSize: "0.8125rem", color: textMuted }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+    <div className="oc-home min-h-screen flex flex-col bg-white">
+      <SiteNav />
 
-      {/* Open roles */}
-      <section className="relative z-10" style={{ padding: "72px 0" }}>
-        <div className="container" style={{ maxWidth: 860 }}>
-          <div style={{ marginBottom: 40 }}>
-            <div style={{ display: "inline-flex", ...glassChip("#38BDF8"), padding: "5px 14px", borderRadius: 100, color: "#7DD3FC", fontSize: "0.8125rem", fontWeight: 600, marginBottom: 16 }}>Open roles</div>
-            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.8rem", color: textPrimary, textShadow: "0 2px 20px rgba(5,11,20,0.8)" }}>We&apos;re looking for builders.</h2>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {OPEN_ROLES.map((role) => (
-              <div key={role.title} style={{ ...glassPanel, padding: "28px 28px", borderRadius: 18 }}>
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 12 }}>
-                  <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5 }}>
-                      <span style={{ ...glassChip(TEAM_COLOR[role.team] || "#38BDF8", 0.16), padding: "2px 10px", borderRadius: 100, fontSize: "0.6875rem", fontWeight: 700, color: TEAM_COLOR[role.team] || "#38BDF8" }}>{role.team}</span>
-                    </div>
-                    <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.125rem", color: textPrimary }}>{role.title}</h3>
-                    <div style={{ fontSize: "0.8125rem", color: textMuted, marginTop: 3 }}>{role.type}</div>
+      <main id="main-content" className="flex-1">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden pb-16 pt-28 md:pb-24 md:pt-40">
+          <DecorativeBackground />
+          <div className="oc-container relative">
+            <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+              <div className="oc-rise">
+                <Badge>We&apos;re hiring</Badge>
+              </div>
+
+              <h1 className="oc-h1 oc-rise mt-6" style={{ animationDelay: "100ms" }}>
+                Build the future of
+                <br />
+                <span className="oc-accent">personal health AI.</span>
+              </h1>
+
+              <p
+                className="oc-muted oc-rise mt-6 max-w-2xl text-base leading-relaxed md:text-lg"
+                style={{ animationDelay: "200ms" }}
+              >
+                Studio ILLIOS is a small, focused team building AI-native health infrastructure. We ship fast, own what
+                we build, and work on problems that actually matter. India-based, globally distributed.
+              </p>
+
+              {/* Highlights strip */}
+              <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+                {PERKS.map((s) => (
+                  <div key={s.num} className="oc-card p-5 text-center">
+                    <div className="text-lg font-bold text-ink font-sans">{s.num}</div>
+                    <div className="mt-1 text-xs text-ink/70 font-medium">{s.label}</div>
                   </div>
-                  <a
-                    href={`mailto:design@studioilios.com?subject=Application: ${role.title}`}
-                    style={{
-                      display: "inline-flex", alignItems: "center", gap: 7,
-                      padding: "10px 22px",
-                      background: "linear-gradient(135deg, rgba(56,189,248,0.55), rgba(52,211,153,0.55))",
-                      backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
-                      border: "1px solid rgba(255,255,255,0.18)",
-                      color: "#F5F9FF", borderRadius: 100, textDecoration: "none",
-                      fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.875rem",
-                      flexShrink: 0,
-                    }}
-                  >
-                    Apply now
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  </a>
-                </div>
-                <p style={{ fontSize: "0.9rem", color: textSecondary, lineHeight: 1.6, marginBottom: 14 }}>{role.desc}</p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
-                  {role.skills.map((skill) => (
-                    <span key={skill} style={{ padding: "3px 10px", background: "rgba(255,255,255,0.05)", border: `1px solid ${borderColor}`, borderRadius: 100, fontSize: "0.75rem", fontWeight: 600, color: textMuted, fontFamily: "var(--font-mono)" }}>{skill}</span>
-                  ))}
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Open Roles Section */}
+        <section className="oc-section oc-tint py-16 md:py-24">
+          <div aria-hidden className="pointer-events-none absolute inset-0">
+            <div className="oc-dots absolute -left-10 top-10 h-64 w-64 opacity-50" />
+            <div className="oc-blob -right-24 bottom-10 h-72 w-72 bg-aqua/20" />
           </div>
 
-          {/* General application */}
-          <div style={{ ...glassPanel, marginTop: 32, padding: "28px 32px", borderRadius: 18, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
-            <div>
-              <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.0625rem", color: textPrimary, marginBottom: 5 }}>Don&apos;t see your role?</h3>
-              <p style={{ fontSize: "0.875rem", color: textSecondary }}>Send us what you build. If it&apos;s impressive, we&apos;ll make room.</p>
+          <div className="oc-container relative max-w-4xl">
+            <div className="text-center mb-12">
+              <span className="oc-badge">Open roles</span>
+              <h2 className="oc-h2 mt-3 text-ink">We&apos;re looking for builders.</h2>
+              <p className="oc-muted mt-2 text-base">
+                Explore our current openings. If you have extreme conviction and speed, we want to hear from you.
+              </p>
             </div>
-            <a
-              href="mailto:design@studioilios.com?subject=General Application — OceanAI"
-              style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "12px 24px", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.16)", color: textPrimary, borderRadius: 100, textDecoration: "none", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "0.875rem", flexShrink: 0 }}
-            >
-              Send a general application →
-            </a>
+
+            <div className="flex flex-col gap-6">
+              {OPEN_ROLES.map((role) => (
+                <div
+                  key={role.title}
+                  className="oc-card p-7 md:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                    <div>
+                      <div className="flex items-center gap-2.5 mb-2">
+                        <span className="inline-block rounded-full bg-ink px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wider text-aqua">
+                          {role.team}
+                        </span>
+                        <span className="text-xs font-semibold text-ink/60">{role.type}</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-ink">{role.title}</h3>
+                    </div>
+
+                    <a
+                      href={`mailto:design@studioilios.com?subject=Application: ${encodeURIComponent(role.title)}`}
+                      className="oc-btn oc-btn-primary self-start sm:self-auto text-sm"
+                    >
+                      <span>Apply now</span>
+                      <Icon name="arrow" size={16} />
+                    </a>
+                  </div>
+
+                  <p className="oc-muted text-sm leading-relaxed mb-6">{role.desc}</p>
+
+                  <div className="border-t border-black/5 pt-4 flex flex-wrap gap-2 items-center">
+                    <span className="text-xs font-bold uppercase tracking-wider text-ink/40 mr-1">Skills:</span>
+                    {role.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="rounded-full bg-aqua-soft px-3 py-1 text-xs font-semibold text-aqua-deep border border-aqua/20"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* General Application Card */}
+            <div className="mt-12 rounded-[2rem] bg-ink text-white p-8 md:p-10 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+              <div className="oc-blob -right-10 -bottom-10 h-48 w-48 bg-aqua/25" />
+              <div className="relative z-10 text-center md:text-left">
+                <h3 className="text-xl font-bold text-white mb-2">Don&apos;t see your role?</h3>
+                <p className="text-sm text-white/70 max-w-md">
+                  Send us what you build, your GitHub, or projects you&apos;re proud of. If it&apos;s impressive, we&apos;ll
+                  make room.
+                </p>
+              </div>
+              <div className="relative z-10 flex-shrink-0">
+                <CTAButton
+                  href="mailto:design@studioilios.com?subject=General Application — OceanAI"
+                  external
+                >
+                  Send a general application
+                </CTAButton>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
-    </CompanyShell>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </div>
   );
 }

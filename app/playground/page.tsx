@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import PlaygroundScene from "@/components/canvas/PlaygroundScene";
+import SiteNav from "@/components/site/SiteNav";
+import SiteFooter from "@/components/site/SiteFooter";
+import { Badge, CTAButton, DecorativeBackground, Icon } from "@/components/site/primitives";
 
 export const metadata: Metadata = {
   title: "Playground — Try OceanAI",
-  description: "Try OceanAI features interactively. Upload health files, look up insurance codes, explore organ health. No login needed.",
+  description:
+    "Try OceanAI features interactively. Upload health files, look up insurance codes, explore organ health. No login needed.",
 };
 
 const DEMOS = [
@@ -13,227 +16,192 @@ const DEMOS = [
     title: "Smart File Upload",
     desc: "Drop any health file — PDF, image, lab report, prescription. AI extracts structured data in real time.",
     href: "/playground/upload",
-    cta: "Try Upload →",
+    cta: "Try Upload",
     tag: "AI Powered",
-    tagColor: "blue",
   },
   {
     icon: "🔬",
     title: "Insurance AI",
     desc: "Ask about ICD-10 codes, CPT codes, or DRG mappings in plain English. Powered by AxisMapper.",
     href: "/playground/insurance",
-    cta: "Try Insurance AI →",
+    cta: "Try Insurance AI",
     tag: "AI Powered",
-    tagColor: "blue",
   },
   {
     icon: "🫀",
     title: "Organ Explorer",
     desc: "Click on organs in an interactive body map. See what OceanAI monitors for each system.",
     href: "/playground/organs",
-    cta: "Explore Organs →",
+    cta: "Explore Organs",
     tag: "Interactive",
-    tagColor: "emerald",
   },
   {
     icon: "🎙️",
     title: "Voice AI Demo",
     desc: "Tap the mic, speak your health question, and hear the AI respond. Simulates the in-app voice experience.",
     href: "/playground/voice",
-    cta: "Try Voice →",
+    cta: "Try Voice",
     tag: "AI Powered",
-    tagColor: "blue",
   },
   {
     icon: "🩺",
     title: "Appointment Flow",
     desc: "Walk through the doctor booking experience. See how OceanAI handles scheduling.",
     href: "/playground/appointment",
-    cta: "See Booking →",
+    cta: "See Booking",
     tag: "Demo UI",
-    tagColor: "amber",
   },
 ];
 
-const TAG_COLORS: Record<string, { bg: string; color: string }> = {
-  blue: { bg: "rgba(56, 189, 248, 0.16)", color: "#7DD3FC" },
-  emerald: { bg: "rgba(52, 211, 153, 0.16)", color: "#6EE7B7" },
-  amber: { bg: "rgba(251, 191, 36, 0.16)", color: "#FCD34D" },
-};
-
 export default function PlaygroundPage() {
   return (
-    <div className="relative">
-      {/* Fixed 3D backdrop — the "hub" variant borrows a ring color from
-          each of the 5 demos below, since this page previews all of them.
-          Same fixed/z-0 layer the detail pages use, so it shows through
-          every non-opaque section on this page. */}
-      <PlaygroundScene variant="hub" />
+    <div className="oc-home min-h-screen flex flex-col bg-white">
+      <SiteNav />
 
-      {/* Hero */}
-      <section className="relative z-10" style={{ paddingTop: 140, paddingBottom: 80 }}>
-        <div className="container" style={{ position: "relative", zIndex: 2, textAlign: "center" }}>
-          <div style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            padding: "5px 14px",
-            background: "rgba(26, 107, 255, 0.12)",
-            border: "1px solid rgba(26, 107, 255, 0.25)",
-            borderRadius: 100,
-            color: "#60A5FA",
-            fontSize: "0.8125rem",
-            fontWeight: 600,
-            letterSpacing: "0.04em",
-            marginBottom: 24,
-          }}>
-            No login · No account · Just try it
+      <main id="main-content" className="flex-1">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden pb-14 pt-28 md:pb-20 md:pt-40">
+          <DecorativeBackground />
+          <div className="oc-container relative">
+            <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+              <div className="oc-rise">
+                <Badge>No login · No account · Just try it</Badge>
+              </div>
+
+              <h1 className="oc-h1 oc-rise mt-6" style={{ animationDelay: "100ms" }}>
+                The OceanAI <span className="oc-accent">Playground.</span>
+              </h1>
+
+              <p
+                className="oc-muted oc-rise mt-5 max-w-xl text-base leading-relaxed md:text-lg"
+                style={{ animationDelay: "200ms" }}
+              >
+                Interact with the core features of OceanAI directly in your browser. Real AI. Real results.
+              </p>
+
+              <div
+                className="oc-rise mt-8 flex flex-wrap items-center justify-center gap-3"
+                style={{ animationDelay: "300ms" }}
+              >
+                <CTAButton href="#demos">Explore demos</CTAButton>
+                <CTAButton href="/features" variant="secondary" arrow={false}>
+                  View all features
+                </CTAButton>
+              </div>
+            </div>
           </div>
-          <h1 style={{
-            fontFamily: "var(--font-display)",
-            fontWeight: 800,
-            fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
-            color: "white",
-            letterSpacing: "-0.03em",
-            lineHeight: 1.1,
-            marginBottom: 20,
-            textShadow: "0 2px 24px rgba(5, 11, 20, 0.85)",
-          }}>
-            The OceanAI Playground
-          </h1>
-          <p style={{
-            fontSize: "1.0625rem",
-            color: "rgba(255,255,255,0.6)",
-            maxWidth: 480,
-            margin: "0 auto",
-            lineHeight: 1.6,
-            textShadow: "0 1px 12px rgba(5, 11, 20, 0.7)",
-          }}>
-            Interact with the core features of OceanAI directly in your browser. Real AI. Real results.
-          </p>
-        </div>
-      </section>
+        </section>
 
-      {/* Demo cards — transparent section, cards keep their own opaque
-          --bg-card background so they read fine over the 3D scene, the
-          same way the stat cards on every other page do. */}
-      <section className="section-pad relative z-10">
-        <div className="container">
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 20,
-          }}>
-            {DEMOS.map((demo) => {
-              const tc = TAG_COLORS[demo.tagColor] || TAG_COLORS.blue;
-              return (
-                <Link key={demo.href} href={demo.href} style={{ textDecoration: "none" }}>
-                  <div
-                    className="pg-card"
-                    style={{
-                      padding: "32px 28px",
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      // background: "rgba(6, 14, 26, 0.6)",
-                      backdropFilter: "blur(2px)",
-                      WebkitBackdropFilter: "blur(22px)",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
-                      borderRadius: 20,
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 18 }}>
-                      <div style={{
-                        width: 56,
-                        height: 56,
-                        borderRadius: 14,
-                        background: "rgba(255, 255, 255, 0.06)",
-                        border: "1px solid rgba(255, 255, 255, 0.08)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "1.75rem",
-                      }}>
+        {/* Demos Grid Section */}
+        <section id="demos" className="oc-section oc-tint pt-12 pb-24">
+          <div aria-hidden className="pointer-events-none absolute inset-0">
+            <div className="oc-dots absolute -left-10 top-10 h-64 w-64 opacity-50" />
+            <div className="oc-blob -right-24 bottom-10 h-72 w-72 bg-aqua/20" />
+          </div>
+
+          <div className="oc-container relative">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <span className="oc-badge">Interactive simulations</span>
+              <h2 className="oc-h2 mt-3 text-ink">
+                Test the engine <span className="oc-accent">live</span>
+              </h2>
+              <p className="oc-muted mt-3 text-base">
+                Select a module below to launch the sandbox environment with live inference and mock patient contexts.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {DEMOS.map((demo) => (
+                <Link
+                  key={demo.href}
+                  href={demo.href}
+                  className="group oc-card p-7 md:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-15px_rgba(0,35,33,0.15)] no-underline"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-6">
+                      <span className="grid h-14 w-14 place-items-center rounded-2xl bg-aqua-soft text-2xl transition-transform duration-300 group-hover:scale-110 shadow-sm border border-aqua/20">
                         {demo.icon}
-                      </div>
-                      <span style={{
-                        ...tc,
-                        display: "inline-flex",
-                        padding: "3px 10px",
-                        borderRadius: 100,
-                        fontSize: "0.6875rem",
-                        fontWeight: 700,
-                        letterSpacing: "0.05em",
-                        textTransform: "uppercase",
-                      }}>
+                      </span>
+                      <span className="inline-block rounded-full bg-ink px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wider text-aqua">
                         {demo.tag}
                       </span>
                     </div>
 
-                    <h2 style={{
-                      fontFamily: "var(--font-display)",
-                      fontWeight: 700,
-                      fontSize: "1.125rem",
-                      color: "#EAF2FB",
-                      marginBottom: 10,
-                      letterSpacing: "-0.01em",
-                      textShadow: "0 1px 10px rgba(5, 11, 20, 0.6)",
-                    }}>
+                    <h3 className="text-xl font-bold text-ink transition-colors group-hover:text-aqua-deep">
                       {demo.title}
-                    </h2>
-                    <p style={{
-                      fontSize: "0.9rem",
-                      color: "rgba(234, 242, 251, 0.62)",
-                      lineHeight: 1.6,
-                      flex: 1,
-                      marginBottom: 20,
-                    }}>
-                      {demo.desc}
-                    </p>
+                    </h3>
 
-                    <div style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 6,
-                      padding: "10px 18px",
-                      background: "rgba(26, 107, 255, 0.18)",
-                      color: "#93C5FD",
-                      borderRadius: 100,
-                      fontFamily: "var(--font-display)",
-                      fontWeight: 600,
-                      fontSize: "0.875rem",
-                      width: "fit-content",
-                    }}>
-                      {demo.cta}
-                    </div>
+                    <p className="oc-muted mt-2.5 text-sm leading-relaxed">{demo.desc}</p>
+                  </div>
+
+                  <div className="mt-8 flex items-center gap-1.5 text-sm font-bold text-aqua-deep transition-colors group-hover:text-ink">
+                    <span>{demo.cta}</span>
+                    <Icon name="arrow" size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
                   </div>
                 </Link>
-              );
-            })}
-          </div>
-        </div>
+              ))}
 
-        <style>{`
-          .pg-card {
-            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-          }
-          .pg-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(255, 255, 255, 0.22) !important;
-            background: rgba(6, 14, 26, 0.74) !important;
-          }
-          @media (max-width: 1024px) {
-            div[style*="grid-template-columns: repeat(3, 1fr)"] {
-              grid-template-columns: repeat(2, 1fr) !important;
-            }
-          }
-          @media (max-width: 640px) {
-            div[style*="grid-template-columns: repeat(3, 1fr)"] {
-              grid-template-columns: 1fr !important;
-            }
-          }
-        `}</style>
-      </section>
+              {/* Companion App Teaser Card */}
+              <div className="oc-card p-7 md:p-8 flex flex-col justify-between bg-gradient-to-br from-white to-aqua-soft/50 border border-aqua/30">
+                <div>
+                  <div className="flex items-center justify-between gap-3 mb-6">
+                    <span className="grid h-14 w-14 place-items-center rounded-2xl bg-aqua text-ink text-2xl shadow-sm">
+                      📱
+                    </span>
+                    <span className="inline-block rounded-full bg-aqua-soft px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wider text-aqua-deep border border-aqua/30">
+                      Mobile App
+                    </span>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-ink">
+                    Full Mobile Suite
+                  </h3>
+
+                  <p className="oc-muted mt-2.5 text-sm leading-relaxed">
+                    Offline on-device inference, Apple HealthKit sync, Android Health Connect, and full encrypted vault.
+                  </p>
+                </div>
+
+                <div className="mt-8">
+                  <CTAButton href="https://apps.apple.com" external>
+                    Get the App
+                  </CTAButton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Bottom Banner */}
+        <section className="oc-section pb-24 pt-8 bg-white">
+          <div className="oc-container">
+            <div className="relative overflow-hidden rounded-[2rem] bg-ink px-6 py-12 text-center text-white shadow-[0_30px_70px_-20px_rgba(0,35,33,0.45)] md:rounded-[2.5rem] md:px-12 md:py-16">
+              <div className="oc-blob -right-10 -top-10 h-64 w-64 bg-aqua/30" />
+              <div className="oc-dots absolute -bottom-10 -left-10 h-56 w-56 opacity-30" />
+
+              <div className="relative z-10 mx-auto max-w-2xl">
+                <span className="inline-block rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-aqua backdrop-blur">
+                  On-device Intelligence
+                </span>
+                <h2 className="mt-5 text-2xl font-extrabold leading-tight text-white md:text-4xl">
+                  Private by default. <span className="text-aqua">Fast by design.</span>
+                </h2>
+                <p className="mt-4 text-sm leading-relaxed text-white/70 md:text-base">
+                  Every demo here is powered by lightweight, quantized models built by Studio ILLIOS.
+                </p>
+                <div className="mt-8 flex flex-wrap justify-center gap-3">
+                  <CTAButton href="/subscription">View Plans</CTAButton>
+                  <CTAButton href="/features" variant="secondary" arrow={false}>
+                    Explore Features
+                  </CTAButton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
     </div>
   );
 }
